@@ -37,18 +37,21 @@ Partial Class main
         Me.Label2 = New System.Windows.Forms.Label()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
         Me.btn_DoHoming = New System.Windows.Forms.Button()
-        Me.ShapeContainer1 = New Microsoft.VisualBasic.PowerPacks.ShapeContainer()
-        Me.shapeTX = New Microsoft.VisualBasic.PowerPacks.OvalShape()
         Me.btn_CloseComPort = New System.Windows.Forms.Button()
-        Me.Button1 = New System.Windows.Forms.Button()
-        Me.TextBox1 = New System.Windows.Forms.TextBox()
-        Me.Button2 = New System.Windows.Forms.Button()
+        Me.btn_getMachineConfig = New System.Windows.Forms.Button()
+        Me.tb_single_command = New System.Windows.Forms.TextBox()
+        Me.btn_sendSingleCommand = New System.Windows.Forms.Button()
+        Me.TextBox2 = New System.Windows.Forms.TextBox()
+        Me.TextBox3 = New System.Windows.Forms.TextBox()
+        Me.btn_G999 = New System.Windows.Forms.Button()
+        Me.btn_moveX10 = New System.Windows.Forms.Button()
+        Me.btn_moveX100Y200 = New System.Windows.Forms.Button()
         Me.GroupBox1.SuspendLayout()
         Me.SuspendLayout()
         '
         'btn_ConnectToSelectedPort
         '
-        Me.btn_ConnectToSelectedPort.Location = New System.Drawing.Point(36, 120)
+        Me.btn_ConnectToSelectedPort.Location = New System.Drawing.Point(13, 38)
         Me.btn_ConnectToSelectedPort.Name = "btn_ConnectToSelectedPort"
         Me.btn_ConnectToSelectedPort.Size = New System.Drawing.Size(75, 23)
         Me.btn_ConnectToSelectedPort.TabIndex = 0
@@ -58,9 +61,9 @@ Partial Class main
         'ListBox1
         '
         Me.ListBox1.FormattingEnabled = True
-        Me.ListBox1.Location = New System.Drawing.Point(136, 383)
+        Me.ListBox1.Location = New System.Drawing.Point(610, 292)
         Me.ListBox1.Name = "ListBox1"
-        Me.ListBox1.Size = New System.Drawing.Size(366, 160)
+        Me.ListBox1.Size = New System.Drawing.Size(366, 251)
         Me.ListBox1.TabIndex = 1
         '
         'cb_COMPort
@@ -82,40 +85,40 @@ Partial Class main
         '
         'btn_moveXplus
         '
-        Me.btn_moveXplus.Font = New System.Drawing.Font("Microsoft Sans Serif", 24.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btn_moveXplus.Location = New System.Drawing.Point(810, 217)
+        Me.btn_moveXplus.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btn_moveXplus.Location = New System.Drawing.Point(559, 21)
         Me.btn_moveXplus.Name = "btn_moveXplus"
-        Me.btn_moveXplus.Size = New System.Drawing.Size(80, 80)
+        Me.btn_moveXplus.Size = New System.Drawing.Size(45, 40)
         Me.btn_moveXplus.TabIndex = 4
         Me.btn_moveXplus.Text = "X +"
         Me.btn_moveXplus.UseVisualStyleBackColor = True
         '
         'btn_moveXminus
         '
-        Me.btn_moveXminus.Font = New System.Drawing.Font("Microsoft Sans Serif", 24.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btn_moveXminus.Location = New System.Drawing.Point(638, 217)
+        Me.btn_moveXminus.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btn_moveXminus.Location = New System.Drawing.Point(508, 21)
         Me.btn_moveXminus.Name = "btn_moveXminus"
-        Me.btn_moveXminus.Size = New System.Drawing.Size(80, 80)
+        Me.btn_moveXminus.Size = New System.Drawing.Size(45, 40)
         Me.btn_moveXminus.TabIndex = 5
         Me.btn_moveXminus.Text = "X -"
         Me.btn_moveXminus.UseVisualStyleBackColor = True
         '
         'btn_moveYminus
         '
-        Me.btn_moveYminus.Font = New System.Drawing.Font("Microsoft Sans Serif", 24.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btn_moveYminus.Location = New System.Drawing.Point(724, 303)
+        Me.btn_moveYminus.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btn_moveYminus.Location = New System.Drawing.Point(508, 67)
         Me.btn_moveYminus.Name = "btn_moveYminus"
-        Me.btn_moveYminus.Size = New System.Drawing.Size(80, 80)
+        Me.btn_moveYminus.Size = New System.Drawing.Size(45, 40)
         Me.btn_moveYminus.TabIndex = 7
         Me.btn_moveYminus.Text = "Y -"
         Me.btn_moveYminus.UseVisualStyleBackColor = True
         '
         'btn_moveYplus
         '
-        Me.btn_moveYplus.Font = New System.Drawing.Font("Microsoft Sans Serif", 24.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btn_moveYplus.Location = New System.Drawing.Point(724, 131)
+        Me.btn_moveYplus.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btn_moveYplus.Location = New System.Drawing.Point(559, 67)
         Me.btn_moveYplus.Name = "btn_moveYplus"
-        Me.btn_moveYplus.Size = New System.Drawing.Size(80, 80)
+        Me.btn_moveYplus.Size = New System.Drawing.Size(45, 40)
         Me.btn_moveYplus.TabIndex = 6
         Me.btn_moveYplus.Text = "Y +"
         Me.btn_moveYplus.UseVisualStyleBackColor = True
@@ -124,7 +127,7 @@ Partial Class main
         '
         Me.chkb_FastMovement.AutoSize = True
         Me.chkb_FastMovement.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.chkb_FastMovement.Location = New System.Drawing.Point(726, 250)
+        Me.chkb_FastMovement.Location = New System.Drawing.Point(517, 113)
         Me.chkb_FastMovement.Name = "chkb_FastMovement"
         Me.chkb_FastMovement.Size = New System.Drawing.Size(77, 20)
         Me.chkb_FastMovement.TabIndex = 8
@@ -184,74 +187,102 @@ Partial Class main
         '
         'btn_DoHoming
         '
-        Me.btn_DoHoming.Location = New System.Drawing.Point(12, 490)
+        Me.btn_DoHoming.Location = New System.Drawing.Point(13, 181)
         Me.btn_DoHoming.Name = "btn_DoHoming"
-        Me.btn_DoHoming.Size = New System.Drawing.Size(75, 53)
+        Me.btn_DoHoming.Size = New System.Drawing.Size(76, 56)
         Me.btn_DoHoming.TabIndex = 14
         Me.btn_DoHoming.Text = "Go home!"
         Me.btn_DoHoming.UseVisualStyleBackColor = True
         '
-        'ShapeContainer1
-        '
-        Me.ShapeContainer1.Location = New System.Drawing.Point(0, 0)
-        Me.ShapeContainer1.Margin = New System.Windows.Forms.Padding(0)
-        Me.ShapeContainer1.Name = "ShapeContainer1"
-        Me.ShapeContainer1.Shapes.AddRange(New Microsoft.VisualBasic.PowerPacks.Shape() {Me.shapeTX})
-        Me.ShapeContainer1.Size = New System.Drawing.Size(911, 555)
-        Me.ShapeContainer1.TabIndex = 15
-        Me.ShapeContainer1.TabStop = False
-        '
-        'shapeTX
-        '
-        Me.shapeTX.BackColor = System.Drawing.Color.Khaki
-        Me.shapeTX.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None
-        Me.shapeTX.BackStyle = Microsoft.VisualBasic.PowerPacks.BackStyle.Opaque
-        Me.shapeTX.Location = New System.Drawing.Point(661, 493)
-        Me.shapeTX.Name = "shapeTX"
-        Me.shapeTX.Size = New System.Drawing.Size(20, 20)
-        '
         'btn_CloseComPort
         '
-        Me.btn_CloseComPort.Location = New System.Drawing.Point(36, 149)
+        Me.btn_CloseComPort.Location = New System.Drawing.Point(13, 67)
         Me.btn_CloseComPort.Name = "btn_CloseComPort"
         Me.btn_CloseComPort.Size = New System.Drawing.Size(75, 23)
         Me.btn_CloseComPort.TabIndex = 16
         Me.btn_CloseComPort.Text = "disconnect"
         Me.btn_CloseComPort.UseVisualStyleBackColor = True
         '
-        'Button1
+        'btn_getMachineConfig
         '
-        Me.Button1.Location = New System.Drawing.Point(13, 383)
-        Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(75, 23)
-        Me.Button1.TabIndex = 17
-        Me.Button1.Text = "M114"
-        Me.Button1.UseVisualStyleBackColor = True
+        Me.btn_getMachineConfig.Location = New System.Drawing.Point(13, 126)
+        Me.btn_getMachineConfig.Name = "btn_getMachineConfig"
+        Me.btn_getMachineConfig.Size = New System.Drawing.Size(76, 49)
+        Me.btn_getMachineConfig.TabIndex = 17
+        Me.btn_getMachineConfig.Text = "get Config from machine"
+        Me.btn_getMachineConfig.UseVisualStyleBackColor = True
         '
-        'TextBox1
+        'tb_single_command
         '
-        Me.TextBox1.Location = New System.Drawing.Point(189, 232)
-        Me.TextBox1.Name = "TextBox1"
-        Me.TextBox1.Size = New System.Drawing.Size(139, 20)
-        Me.TextBox1.TabIndex = 18
+        Me.tb_single_command.Location = New System.Drawing.Point(12, 492)
+        Me.tb_single_command.Name = "tb_single_command"
+        Me.tb_single_command.Size = New System.Drawing.Size(138, 20)
+        Me.tb_single_command.TabIndex = 21
         '
-        'Button2
+        'btn_sendSingleCommand
         '
-        Me.Button2.Location = New System.Drawing.Point(348, 230)
-        Me.Button2.Name = "Button2"
-        Me.Button2.Size = New System.Drawing.Size(75, 23)
-        Me.Button2.TabIndex = 19
-        Me.Button2.Text = "Button2"
-        Me.Button2.UseVisualStyleBackColor = True
+        Me.btn_sendSingleCommand.Location = New System.Drawing.Point(159, 492)
+        Me.btn_sendSingleCommand.Name = "btn_sendSingleCommand"
+        Me.btn_sendSingleCommand.Size = New System.Drawing.Size(72, 23)
+        Me.btn_sendSingleCommand.TabIndex = 22
+        Me.btn_sendSingleCommand.Text = "senden"
+        Me.btn_sendSingleCommand.UseVisualStyleBackColor = True
+        '
+        'TextBox2
+        '
+        Me.TextBox2.Location = New System.Drawing.Point(610, 12)
+        Me.TextBox2.Multiline = True
+        Me.TextBox2.Name = "TextBox2"
+        Me.TextBox2.Size = New System.Drawing.Size(366, 252)
+        Me.TextBox2.TabIndex = 23
+        '
+        'TextBox3
+        '
+        Me.TextBox3.Location = New System.Drawing.Point(12, 518)
+        Me.TextBox3.Name = "TextBox3"
+        Me.TextBox3.Size = New System.Drawing.Size(507, 20)
+        Me.TextBox3.TabIndex = 24
+        '
+        'btn_G999
+        '
+        Me.btn_G999.Location = New System.Drawing.Point(159, 318)
+        Me.btn_G999.Name = "btn_G999"
+        Me.btn_G999.Size = New System.Drawing.Size(129, 23)
+        Me.btn_G999.TabIndex = 25
+        Me.btn_G999.Text = "G999;"
+        Me.btn_G999.UseVisualStyleBackColor = True
+        '
+        'btn_moveX10
+        '
+        Me.btn_moveX10.Location = New System.Drawing.Point(159, 348)
+        Me.btn_moveX10.Name = "btn_moveX10"
+        Me.btn_moveX10.Size = New System.Drawing.Size(129, 23)
+        Me.btn_moveX10.TabIndex = 26
+        Me.btn_moveX10.Text = "G1 X10 Y0 F500;"
+        Me.btn_moveX10.UseVisualStyleBackColor = True
+        '
+        'btn_moveX100Y200
+        '
+        Me.btn_moveX100Y200.Location = New System.Drawing.Point(159, 377)
+        Me.btn_moveX100Y200.Name = "btn_moveX100Y200"
+        Me.btn_moveX100Y200.Size = New System.Drawing.Size(129, 23)
+        Me.btn_moveX100Y200.TabIndex = 27
+        Me.btn_moveX100Y200.Text = "G1 X100 Y200F300;"
+        Me.btn_moveX100Y200.UseVisualStyleBackColor = True
         '
         'main
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(911, 555)
-        Me.Controls.Add(Me.Button2)
-        Me.Controls.Add(Me.TextBox1)
-        Me.Controls.Add(Me.Button1)
+        Me.ClientSize = New System.Drawing.Size(1271, 555)
+        Me.Controls.Add(Me.btn_moveX100Y200)
+        Me.Controls.Add(Me.btn_moveX10)
+        Me.Controls.Add(Me.btn_G999)
+        Me.Controls.Add(Me.TextBox3)
+        Me.Controls.Add(Me.TextBox2)
+        Me.Controls.Add(Me.btn_sendSingleCommand)
+        Me.Controls.Add(Me.tb_single_command)
+        Me.Controls.Add(Me.btn_getMachineConfig)
         Me.Controls.Add(Me.btn_CloseComPort)
         Me.Controls.Add(Me.btn_DoHoming)
         Me.Controls.Add(Me.GroupBox1)
@@ -264,7 +295,6 @@ Partial Class main
         Me.Controls.Add(Me.cb_COMPort)
         Me.Controls.Add(Me.ListBox1)
         Me.Controls.Add(Me.btn_ConnectToSelectedPort)
-        Me.Controls.Add(Me.ShapeContainer1)
         Me.Name = "main"
         Me.Text = "hwCNC"
         Me.GroupBox1.ResumeLayout(False)
@@ -288,11 +318,14 @@ Partial Class main
     Friend WithEvents Label2 As System.Windows.Forms.Label
     Friend WithEvents GroupBox1 As System.Windows.Forms.GroupBox
     Friend WithEvents btn_DoHoming As System.Windows.Forms.Button
-    Friend WithEvents ShapeContainer1 As Microsoft.VisualBasic.PowerPacks.ShapeContainer
-    Friend WithEvents shapeTX As Microsoft.VisualBasic.PowerPacks.OvalShape
     Friend WithEvents btn_CloseComPort As System.Windows.Forms.Button
-    Friend WithEvents Button1 As System.Windows.Forms.Button
-    Friend WithEvents TextBox1 As System.Windows.Forms.TextBox
-    Friend WithEvents Button2 As System.Windows.Forms.Button
+    Friend WithEvents btn_getMachineConfig As System.Windows.Forms.Button
+    Friend WithEvents tb_single_command As System.Windows.Forms.TextBox
+    Friend WithEvents btn_sendSingleCommand As System.Windows.Forms.Button
+    Friend WithEvents TextBox2 As System.Windows.Forms.TextBox
+    Friend WithEvents TextBox3 As System.Windows.Forms.TextBox
+    Friend WithEvents btn_G999 As System.Windows.Forms.Button
+    Friend WithEvents btn_moveX10 As System.Windows.Forms.Button
+    Friend WithEvents btn_moveX100Y200 As System.Windows.Forms.Button
 
 End Class
