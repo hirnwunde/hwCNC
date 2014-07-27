@@ -23,7 +23,7 @@ Partial Class main
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.btn_ConnectToSelectedPort = New System.Windows.Forms.Button()
-        Me.ListBox1 = New System.Windows.Forms.ListBox()
+        Me.lb_serialOutput = New System.Windows.Forms.ListBox()
         Me.cb_COMPort = New System.Windows.Forms.ComboBox()
         Me.btn_RefreshCOMPort = New System.Windows.Forms.Button()
         Me.btn_moveXplus = New System.Windows.Forms.Button()
@@ -41,11 +41,14 @@ Partial Class main
         Me.btn_getMachineConfig = New System.Windows.Forms.Button()
         Me.tb_single_command = New System.Windows.Forms.TextBox()
         Me.btn_sendSingleCommand = New System.Windows.Forms.Button()
-        Me.TextBox2 = New System.Windows.Forms.TextBox()
+        Me.tb_serialOutput = New System.Windows.Forms.TextBox()
         Me.TextBox3 = New System.Windows.Forms.TextBox()
         Me.btn_G999 = New System.Windows.Forms.Button()
         Me.btn_moveX10 = New System.Windows.Forms.Button()
         Me.btn_moveX100Y200 = New System.Windows.Forms.Button()
+        Me.tb_GCodeProgramm = New System.Windows.Forms.TextBox()
+        Me.btn_tmpbutton = New System.Windows.Forms.Button()
+        Me.btn_sendProgramm = New System.Windows.Forms.Button()
         Me.GroupBox1.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -58,13 +61,13 @@ Partial Class main
         Me.btn_ConnectToSelectedPort.Text = "connect"
         Me.btn_ConnectToSelectedPort.UseVisualStyleBackColor = True
         '
-        'ListBox1
+        'lb_serialOutput
         '
-        Me.ListBox1.FormattingEnabled = True
-        Me.ListBox1.Location = New System.Drawing.Point(610, 292)
-        Me.ListBox1.Name = "ListBox1"
-        Me.ListBox1.Size = New System.Drawing.Size(366, 251)
-        Me.ListBox1.TabIndex = 1
+        Me.lb_serialOutput.FormattingEnabled = True
+        Me.lb_serialOutput.Location = New System.Drawing.Point(610, 292)
+        Me.lb_serialOutput.Name = "lb_serialOutput"
+        Me.lb_serialOutput.Size = New System.Drawing.Size(366, 251)
+        Me.lb_serialOutput.TabIndex = 1
         '
         'cb_COMPort
         '
@@ -146,7 +149,6 @@ Partial Class main
         '
         'tb_ActPosX
         '
-        Me.tb_ActPosX.Enabled = False
         Me.tb_ActPosX.Font = New System.Drawing.Font("Courier New", 36.0!, System.Drawing.FontStyle.Bold)
         Me.tb_ActPosX.Location = New System.Drawing.Point(72, 13)
         Me.tb_ActPosX.Name = "tb_ActPosX"
@@ -155,7 +157,6 @@ Partial Class main
         '
         'tb_ActPosY
         '
-        Me.tb_ActPosY.Enabled = False
         Me.tb_ActPosY.Font = New System.Drawing.Font("Courier New", 36.0!, System.Drawing.FontStyle.Bold)
         Me.tb_ActPosY.Location = New System.Drawing.Point(72, 81)
         Me.tb_ActPosY.Name = "tb_ActPosY"
@@ -228,13 +229,13 @@ Partial Class main
         Me.btn_sendSingleCommand.Text = "senden"
         Me.btn_sendSingleCommand.UseVisualStyleBackColor = True
         '
-        'TextBox2
+        'tb_serialOutput
         '
-        Me.TextBox2.Location = New System.Drawing.Point(610, 12)
-        Me.TextBox2.Multiline = True
-        Me.TextBox2.Name = "TextBox2"
-        Me.TextBox2.Size = New System.Drawing.Size(366, 252)
-        Me.TextBox2.TabIndex = 23
+        Me.tb_serialOutput.Location = New System.Drawing.Point(610, 12)
+        Me.tb_serialOutput.Multiline = True
+        Me.tb_serialOutput.Name = "tb_serialOutput"
+        Me.tb_serialOutput.Size = New System.Drawing.Size(366, 252)
+        Me.tb_serialOutput.TabIndex = 23
         '
         'TextBox3
         '
@@ -270,16 +271,46 @@ Partial Class main
         Me.btn_moveX100Y200.Text = "G1 X100 Y200F300;"
         Me.btn_moveX100Y200.UseVisualStyleBackColor = True
         '
+        'tb_GCodeProgramm
+        '
+        Me.tb_GCodeProgramm.Location = New System.Drawing.Point(1034, 59)
+        Me.tb_GCodeProgramm.Multiline = True
+        Me.tb_GCodeProgramm.Name = "tb_GCodeProgramm"
+        Me.tb_GCodeProgramm.Size = New System.Drawing.Size(225, 323)
+        Me.tb_GCodeProgramm.TabIndex = 28
+        Me.tb_GCodeProgramm.Text = "G1 X1 Y0 F200;" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "G1 X2 Y30;" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "G1 X3 Y40;" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "M30;"
+        '
+        'btn_tmpbutton
+        '
+        Me.btn_tmpbutton.Location = New System.Drawing.Point(1184, 12)
+        Me.btn_tmpbutton.Name = "btn_tmpbutton"
+        Me.btn_tmpbutton.Size = New System.Drawing.Size(75, 41)
+        Me.btn_tmpbutton.TabIndex = 29
+        Me.btn_tmpbutton.Text = "Button1"
+        Me.btn_tmpbutton.UseVisualStyleBackColor = True
+        '
+        'btn_sendProgramm
+        '
+        Me.btn_sendProgramm.Location = New System.Drawing.Point(1155, 388)
+        Me.btn_sendProgramm.Name = "btn_sendProgramm"
+        Me.btn_sendProgramm.Size = New System.Drawing.Size(104, 30)
+        Me.btn_sendProgramm.TabIndex = 30
+        Me.btn_sendProgramm.Text = "send programm"
+        Me.btn_sendProgramm.UseVisualStyleBackColor = True
+        '
         'main
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(1271, 555)
+        Me.Controls.Add(Me.btn_sendProgramm)
+        Me.Controls.Add(Me.btn_tmpbutton)
+        Me.Controls.Add(Me.tb_GCodeProgramm)
         Me.Controls.Add(Me.btn_moveX100Y200)
         Me.Controls.Add(Me.btn_moveX10)
         Me.Controls.Add(Me.btn_G999)
         Me.Controls.Add(Me.TextBox3)
-        Me.Controls.Add(Me.TextBox2)
+        Me.Controls.Add(Me.tb_serialOutput)
         Me.Controls.Add(Me.btn_sendSingleCommand)
         Me.Controls.Add(Me.tb_single_command)
         Me.Controls.Add(Me.btn_getMachineConfig)
@@ -293,7 +324,7 @@ Partial Class main
         Me.Controls.Add(Me.btn_moveXplus)
         Me.Controls.Add(Me.btn_RefreshCOMPort)
         Me.Controls.Add(Me.cb_COMPort)
-        Me.Controls.Add(Me.ListBox1)
+        Me.Controls.Add(Me.lb_serialOutput)
         Me.Controls.Add(Me.btn_ConnectToSelectedPort)
         Me.Name = "main"
         Me.Text = "hwCNC"
@@ -304,7 +335,7 @@ Partial Class main
 
     End Sub
     Friend WithEvents btn_ConnectToSelectedPort As System.Windows.Forms.Button
-    Friend WithEvents ListBox1 As System.Windows.Forms.ListBox
+    Friend WithEvents lb_serialOutput As System.Windows.Forms.ListBox
     Friend WithEvents cb_COMPort As System.Windows.Forms.ComboBox
     Friend WithEvents btn_RefreshCOMPort As System.Windows.Forms.Button
     Friend WithEvents btn_moveXplus As System.Windows.Forms.Button
@@ -322,10 +353,13 @@ Partial Class main
     Friend WithEvents btn_getMachineConfig As System.Windows.Forms.Button
     Friend WithEvents tb_single_command As System.Windows.Forms.TextBox
     Friend WithEvents btn_sendSingleCommand As System.Windows.Forms.Button
-    Friend WithEvents TextBox2 As System.Windows.Forms.TextBox
+    Friend WithEvents tb_serialOutput As System.Windows.Forms.TextBox
     Friend WithEvents TextBox3 As System.Windows.Forms.TextBox
     Friend WithEvents btn_G999 As System.Windows.Forms.Button
     Friend WithEvents btn_moveX10 As System.Windows.Forms.Button
     Friend WithEvents btn_moveX100Y200 As System.Windows.Forms.Button
+    Friend WithEvents tb_GCodeProgramm As System.Windows.Forms.TextBox
+    Friend WithEvents btn_tmpbutton As System.Windows.Forms.Button
+    Friend WithEvents btn_sendProgramm As System.Windows.Forms.Button
 
 End Class

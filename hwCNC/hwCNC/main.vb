@@ -3,6 +3,7 @@
 Public Class main
 
     Dim singlecmd As Boolean = False
+    Dim cmdProcessed As Boolean = False
     Dim WithEvents CNCComPort As New System.IO.Ports.SerialPort
     Delegate Sub SetTextCallback([text] As String)
     Delegate Sub SettextCallbackPos([text] As String)
@@ -16,6 +17,7 @@ Public Class main
         refreshCOMPort()
         tb_ActPosX.Text = "UNDEF"
         tb_ActPosY.Text = "UNDEF"
+
         btn_CloseComPort.Enabled = False
     End Sub
 
@@ -59,38 +61,54 @@ Public Class main
         MsgBox(e.ToString)
     End Sub
 
+    ''' <summary>
+    ''' When data is send from Arduino to PC: get it!
+    ''' here we look, what is send and react on it individually.
+    ''' If string starts with "POS_TRK-" it is a new position and we have to update tb_ActPosX.Text and tb_ActPosY.Text
+    ''' If string starts with "LNMVEND" the last G1-Command is fully processed and we have to send the next command
+    ''' All other will be written to tb_serialOutput and/or lb_serialOutput
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    ''' <remarks></remarks>
     Private Sub CNCComPort_DataReceived(sender As System.Object, e As System.IO.Ports.SerialDataReceivedEventArgs) Handles CNCComPort.DataReceived
         Dim tmparr1(), tmparr2() As String
         Dim actxpos, actypos, posstring As String
+        Dim act_output As String
+            Try
+                If CNCComPort.IsOpen Then
+                    act_output = CNCComPort.ReadLine()
 
-        Dim act_output As String = CNCComPort.ReadLine()
-        Try
-            If act_output.StartsWith("POS_TRK-") Then
-                'POS_TRK-X0.50,Y0.00                tmparr1 = act_output.Split("-")
-                tmparr2 = tmparr1(1).Split(",")
-                actxpos = tmparr2(0)
-                actypos = tmparr2(1)
+                    If act_output.StartsWith("POS_TRK-") Then
+                        'POS_TRK-X0.50,Y0.00
+                        tmparr1 = act_output.Split("-")
+                        tmparr2 = tmparr1(1).Split(",")
+                        actxpos = tmparr2(0)
+                        actypos = tmparr2(1)
 
+                        posstring = actxpos.ToString.Remove(0, 1) + ";" + actypos.ToString.Remove(0, 1)
+                        SetTextPos(posstring)
 
-                posstring = actxpos.ToString.Remove(0, 1) + ";" + actypos.ToString.Remove(0, 1)
-                SetTextPos(posstring)
+                        'MsgBox("poschange:" + act_output)
+                    ElseIf act_output.StartsWith("LNMVEND") Then
+                    cmdProcessed = True
+                    Else
+                        Me.SetText(act_output)
+                    End If
+                End If
+            Catch ex As Exception
+                MsgBox(ex.Message)
+            End Try
 
-                'MsgBox("poschange:" + act_output)
-            Else
-                Me.SetText(act_output)
-            End If
-        Catch ex As Exception
-            MsgBox(ex.Message)
-        End Try
     End Sub
 
     Private Sub SetText(ByVal [text] As String)
-        If Me.ListBox1.InvokeRequired Then
+        If Me.lb_serialOutput.InvokeRequired Then
             Dim d As New SetTextCallback(AddressOf SetText)
             Me.Invoke(d, New Object() {[text]})
         Else
-            Me.TextBox2.AppendText([text] + vbCrLf)
-            Me.ListBox1.Items.Add([text])
+            Me.tb_serialOutput.AppendText([text] + vbCrLf)
+            Me.lb_serialOutput.Items.Add([text])
             If singlecmd Then
                 tb_single_command.AppendText([text])
             End If
@@ -100,7 +118,7 @@ Public Class main
     Private Sub SetTextPos(ByVal [text] As String)
         Dim posarr(2) As String
         If Me.tb_ActPosX.InvokeRequired Or Me.tb_ActPosY.InvokeRequired Then
-            Dim d As New SettextCallbackPos(AddressOf SetText)
+            Dim d As New SettextCallbackPos(AddressOf SetTextPos)
             Me.Invoke(d, New Object() {[text]})
         Else
             posarr = [text].Split(";")
@@ -119,6 +137,8 @@ Public Class main
                 CNCComPort.Close()
                 btn_ConnectToSelectedPort.Enabled = True
                 btn_CloseComPort.Enabled = False
+                tb_ActPosX.Text = "UNDEF"
+                tb_ActPosY.Text = "UNDEF"
             Catch ex As Exception
                 MsgBox(ex.Message)
             End Try
@@ -134,9 +154,15 @@ Public Class main
         SendCommand(tb_single_command.Text)
     End Sub
 
+    ''' <summary>
+    ''' Send a command to the Arduino.
+    ''' Add a ";" if it's missing
+    ''' </summary>
+    ''' <param name="command">Command to send (adds missing ";")</param>
+    ''' <remarks></remarks>
     Private Sub SendCommand(ByVal command As String)
 
-        'If Not command.EndsWith(";") Then command = command + ";"
+        If Not command.EndsWith(";") Then command = command + ";"
 
         If CNCComPort.IsOpen Then
             Try
@@ -158,6 +184,8 @@ Public Class main
 
     Private Sub btn_G999_Click(sender As System.Object, e As System.EventArgs) Handles btn_G999.Click
         SendCommand("G999;")
+        tb_ActPosX.Text = "0.00"
+        tb_ActPosY.Text = "0.00"
     End Sub
 
     Private Sub btn_moveX10_Click(sender As System.Object, e As System.EventArgs) Handles btn_moveX10.Click
@@ -165,6 +193,25 @@ Public Class main
     End Sub
 
     Private Sub btn_moveX100Y200_Click(sender As System.Object, e As System.EventArgs) Handles btn_moveX100Y200.Click
-        SendCommand("G1 X100 Y200 F300;")
+        SendCommand("G1 X100 Y200 F500;")
+    End Sub
+
+    Private Sub tb_ActPosX_GotFocus(sender As Object, e As System.EventArgs) Handles tb_ActPosX.GotFocus
+        btn_tmpbutton.Focus()
+    End Sub
+    Private Sub tb_ActPosY_GotFocus(sender As Object, e As System.EventArgs) Handles tb_ActPosY.GotFocus
+        btn_tmpbutton.Focus()
+    End Sub
+
+    Private Sub btn_sendProgramm_Click(sender As System.Object, e As System.EventArgs) Handles btn_sendProgramm.Click
+        For Each line In tb_GCodeProgramm.Lines
+
+            SendCommand(line)
+            'While Not cmdProcessed
+            'System.Threading.Thread.Sleep(100)
+            'End While
+            cmdProcessed = False
+
+        Next
     End Sub
 End Class
