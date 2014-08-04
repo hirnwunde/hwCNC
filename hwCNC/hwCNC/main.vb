@@ -4,6 +4,7 @@ Public Class main
 
     Dim singlecmd As Boolean = False
     Dim cmdProcessed As Boolean = False
+    Dim COMPortClosing As Boolean = False
     Dim WithEvents CNCComPort As New System.IO.Ports.SerialPort
     Delegate Sub SetTextCallback([text] As String)
     Delegate Sub SettextCallbackPos([text] As String)
@@ -17,6 +18,8 @@ Public Class main
         refreshCOMPort()
         tb_ActPosX.Text = "UNDEF"
         tb_ActPosY.Text = "UNDEF"
+        tb_ActPosX.ReadOnly = True
+        tb_ActPosY.ReadOnly = True
 
         btn_CloseComPort.Enabled = False
     End Sub
@@ -45,6 +48,8 @@ Public Class main
                 CNCComPort.Parity = System.IO.Ports.Parity.None
                 CNCComPort.StopBits = System.IO.Ports.StopBits.One
                 CNCComPort.ReadBufferSize = 64
+                'CNCComPort.ReadTimeout = 200
+                CNCComPort.WriteTimeout = 200
 
                 CNCComPort.Open()
                 btn_ConnectToSelectedPort.Enabled = False
@@ -66,15 +71,20 @@ Public Class main
     ''' here we look, what is send and react on it individually.
     ''' If string starts with "POS_TRK-" it is a new position and we have to update tb_ActPosX.Text and tb_ActPosY.Text
     ''' If string starts with "LNMVEND" the last G1-Command is fully processed and we have to send the next command
+    ''' If string starts with ">" nothing will be displayed (Exit Sub)
     ''' All other will be written to tb_serialOutput and/or lb_serialOutput
     ''' </summary>
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
     ''' <remarks></remarks>
     Private Sub CNCComPort_DataReceived(sender As System.Object, e As System.IO.Ports.SerialDataReceivedEventArgs) Handles CNCComPort.DataReceived
-        Dim tmparr1(), tmparr2() As String
-        Dim actxpos, actypos, posstring As String
-        Dim act_output As String
+
+        If Not COMPortClosing Then
+
+            Dim tmparr1(), tmparr2() As String
+            Dim actxpos, actypos, posstring As String
+            Dim act_output As String
+
             Try
                 If CNCComPort.IsOpen Then
                     act_output = CNCComPort.ReadLine()
@@ -91,14 +101,21 @@ Public Class main
 
                         'MsgBox("poschange:" + act_output)
                     ElseIf act_output.StartsWith("LNMVEND") Then
-                    cmdProcessed = True
+
+                        cmdProcessed = True
+                        MsgBox("Fertig ...")
+
+                    ElseIf act_output.StartsWith(">") Then
+                        Exit Sub
                     Else
                         Me.SetText(act_output)
                     End If
                 End If
+
             Catch ex As Exception
                 MsgBox(ex.Message)
             End Try
+        End If
 
     End Sub
 
@@ -132,7 +149,12 @@ Public Class main
 
 
     Private Sub btn_CloseComPort_Click(sender As System.Object, e As System.EventArgs) Handles btn_CloseComPort.Click
+        COMPortClosing = True
         If CNCComPort.IsOpen Then
+            CNCComPort.DiscardInBuffer()
+            CNCComPort.DiscardOutBuffer()
+            CNCComPort.Dispose()
+
             Try
                 CNCComPort.Close()
                 btn_ConnectToSelectedPort.Enabled = True
@@ -143,6 +165,7 @@ Public Class main
                 MsgBox(ex.Message)
             End Try
         End If
+        COMPortClosing = False
     End Sub
 
     Private Sub btn_getMachineConfig_Click(sender As System.Object, e As System.EventArgs) Handles btn_getMachineConfig.Click
@@ -179,7 +202,35 @@ Public Class main
     End Sub
 
     Private Sub btn_moveXplus_Click(sender As System.Object, e As System.EventArgs) Handles btn_moveXplus.Click
-        SendCommand("V121;")
+        If chkb_FastMovement.Checked Then
+            SendCommand("V125;")
+        Else
+            SendCommand("V121;")
+        End If
+    End Sub
+
+    Private Sub btn_moveXminus_Click(sender As System.Object, e As System.EventArgs) Handles btn_moveXminus.Click
+        If chkb_FastMovement.Checked Then
+            SendCommand("V126;")
+        Else
+            SendCommand("V122;")
+        End If
+    End Sub
+
+    Private Sub btn_moveYminus_Click(sender As System.Object, e As System.EventArgs) Handles btn_moveYminus.Click
+        If chkb_FastMovement.Checked Then
+            SendCommand("V127;")
+        Else
+            SendCommand("V123;")
+        End If
+    End Sub
+
+    Private Sub btn_moveYplus_Click(sender As System.Object, e As System.EventArgs) Handles btn_moveYplus.Click
+        If chkb_FastMovement.Checked Then
+            SendCommand("V128;")
+        Else
+            SendCommand("V124;")
+        End If
     End Sub
 
     Private Sub btn_G999_Click(sender As System.Object, e As System.EventArgs) Handles btn_G999.Click
@@ -196,14 +247,14 @@ Public Class main
         SendCommand("G1 X100 Y200 F500;")
     End Sub
 
-    Private Sub tb_ActPosX_GotFocus(sender As Object, e As System.EventArgs) Handles tb_ActPosX.GotFocus
-        btn_tmpbutton.Focus()
-    End Sub
-    Private Sub tb_ActPosY_GotFocus(sender As Object, e As System.EventArgs) Handles tb_ActPosY.GotFocus
-        btn_tmpbutton.Focus()
-    End Sub
+    'Private Sub tb_ActPosX_GotFocus(sender As Object, e As System.EventArgs) Handles tb_ActPosX.GotFocus
+    '    btn_tmpbutton.Focus()
+    'End Sub
+    'Private Sub tb_ActPosY_GotFocus(sender As Object, e As System.EventArgs) Handles tb_ActPosY.GotFocus
+    '    btn_tmpbutton.Focus()
+    'End Sub
 
-    Private Sub btn_sendProgramm_Click(sender As System.Object, e As System.EventArgs) Handles btn_sendProgramm.Click
+    Private Sub btn_sendProgramm_Click(sender As System.Object, e As System.EventArgs) Handles btn_sendProgram.Click
         For Each line In tb_GCodeProgramm.Lines
 
             SendCommand(line)
@@ -214,4 +265,18 @@ Public Class main
 
         Next
     End Sub
+
+    Private Sub btn_loadProgram_Click(sender As System.Object, e As System.EventArgs) Handles btn_loadProgram.Click
+
+        ofd_GCODE.InitialDirectory = Environment.SpecialFolder.MyComputer
+        ofd_GCODE.Filter = "G-code Files(*.CNC;*.NC;*.G;*.TXT)|*.CNC;*.NC;*.G;*.TXT|All files (*.*)|*.*"
+        ofd_GCODE.ShowDialog()
+
+        'For Each line In System.IO.TextReader(ofd_GCODE.FileName)
+
+        'Next
+
+    End Sub
+
+
 End Class

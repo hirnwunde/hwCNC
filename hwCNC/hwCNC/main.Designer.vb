@@ -48,8 +48,12 @@ Partial Class main
         Me.btn_moveX100Y200 = New System.Windows.Forms.Button()
         Me.tb_GCodeProgramm = New System.Windows.Forms.TextBox()
         Me.btn_tmpbutton = New System.Windows.Forms.Button()
-        Me.btn_sendProgramm = New System.Windows.Forms.Button()
+        Me.btn_sendProgram = New System.Windows.Forms.Button()
+        Me.btn_loadProgram = New System.Windows.Forms.Button()
+        Me.ofd_GCODE = New System.Windows.Forms.OpenFileDialog()
+        Me.NumericUpDown1 = New System.Windows.Forms.NumericUpDown()
         Me.GroupBox1.SuspendLayout()
+        CType(Me.NumericUpDown1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'btn_ConnectToSelectedPort
@@ -64,9 +68,9 @@ Partial Class main
         'lb_serialOutput
         '
         Me.lb_serialOutput.FormattingEnabled = True
-        Me.lb_serialOutput.Location = New System.Drawing.Point(610, 292)
+        Me.lb_serialOutput.Location = New System.Drawing.Point(369, 253)
         Me.lb_serialOutput.Name = "lb_serialOutput"
-        Me.lb_serialOutput.Size = New System.Drawing.Size(366, 251)
+        Me.lb_serialOutput.Size = New System.Drawing.Size(366, 238)
         Me.lb_serialOutput.TabIndex = 1
         '
         'cb_COMPort
@@ -89,7 +93,7 @@ Partial Class main
         'btn_moveXplus
         '
         Me.btn_moveXplus.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btn_moveXplus.Location = New System.Drawing.Point(559, 21)
+        Me.btn_moveXplus.Location = New System.Drawing.Point(210, 135)
         Me.btn_moveXplus.Name = "btn_moveXplus"
         Me.btn_moveXplus.Size = New System.Drawing.Size(45, 40)
         Me.btn_moveXplus.TabIndex = 4
@@ -99,7 +103,7 @@ Partial Class main
         'btn_moveXminus
         '
         Me.btn_moveXminus.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btn_moveXminus.Location = New System.Drawing.Point(508, 21)
+        Me.btn_moveXminus.Location = New System.Drawing.Point(159, 135)
         Me.btn_moveXminus.Name = "btn_moveXminus"
         Me.btn_moveXminus.Size = New System.Drawing.Size(45, 40)
         Me.btn_moveXminus.TabIndex = 5
@@ -109,7 +113,7 @@ Partial Class main
         'btn_moveYminus
         '
         Me.btn_moveYminus.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btn_moveYminus.Location = New System.Drawing.Point(508, 67)
+        Me.btn_moveYminus.Location = New System.Drawing.Point(159, 181)
         Me.btn_moveYminus.Name = "btn_moveYminus"
         Me.btn_moveYminus.Size = New System.Drawing.Size(45, 40)
         Me.btn_moveYminus.TabIndex = 7
@@ -119,7 +123,7 @@ Partial Class main
         'btn_moveYplus
         '
         Me.btn_moveYplus.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btn_moveYplus.Location = New System.Drawing.Point(559, 67)
+        Me.btn_moveYplus.Location = New System.Drawing.Point(210, 181)
         Me.btn_moveYplus.Name = "btn_moveYplus"
         Me.btn_moveYplus.Size = New System.Drawing.Size(45, 40)
         Me.btn_moveYplus.TabIndex = 6
@@ -130,7 +134,7 @@ Partial Class main
         '
         Me.chkb_FastMovement.AutoSize = True
         Me.chkb_FastMovement.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.chkb_FastMovement.Location = New System.Drawing.Point(517, 113)
+        Me.chkb_FastMovement.Location = New System.Drawing.Point(169, 227)
         Me.chkb_FastMovement.Name = "chkb_FastMovement"
         Me.chkb_FastMovement.Size = New System.Drawing.Size(77, 20)
         Me.chkb_FastMovement.TabIndex = 8
@@ -140,36 +144,36 @@ Partial Class main
         'Label1
         '
         Me.Label1.AutoSize = True
-        Me.Label1.Font = New System.Drawing.Font("Courier New", 36.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label1.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label1.Location = New System.Drawing.Point(6, 16)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(81, 54)
+        Me.Label1.Size = New System.Drawing.Size(26, 20)
         Me.Label1.TabIndex = 9
         Me.Label1.Text = "X:"
         '
         'tb_ActPosX
         '
-        Me.tb_ActPosX.Font = New System.Drawing.Font("Courier New", 36.0!, System.Drawing.FontStyle.Bold)
-        Me.tb_ActPosX.Location = New System.Drawing.Point(72, 13)
+        Me.tb_ActPosX.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.tb_ActPosX.Location = New System.Drawing.Point(38, 13)
         Me.tb_ActPosX.Name = "tb_ActPosX"
-        Me.tb_ActPosX.Size = New System.Drawing.Size(170, 62)
+        Me.tb_ActPosX.Size = New System.Drawing.Size(76, 26)
         Me.tb_ActPosX.TabIndex = 10
         '
         'tb_ActPosY
         '
-        Me.tb_ActPosY.Font = New System.Drawing.Font("Courier New", 36.0!, System.Drawing.FontStyle.Bold)
-        Me.tb_ActPosY.Location = New System.Drawing.Point(72, 81)
+        Me.tb_ActPosY.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.tb_ActPosY.Location = New System.Drawing.Point(38, 45)
         Me.tb_ActPosY.Name = "tb_ActPosY"
-        Me.tb_ActPosY.Size = New System.Drawing.Size(170, 62)
+        Me.tb_ActPosY.Size = New System.Drawing.Size(76, 26)
         Me.tb_ActPosY.TabIndex = 12
         '
         'Label2
         '
         Me.Label2.AutoSize = True
-        Me.Label2.Font = New System.Drawing.Font("Courier New", 36.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label2.Location = New System.Drawing.Point(6, 84)
+        Me.Label2.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label2.Location = New System.Drawing.Point(6, 45)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(81, 54)
+        Me.Label2.Size = New System.Drawing.Size(26, 20)
         Me.Label2.TabIndex = 11
         Me.Label2.Text = "Y:"
         '
@@ -181,7 +185,7 @@ Partial Class main
         Me.GroupBox1.Controls.Add(Me.Label2)
         Me.GroupBox1.Location = New System.Drawing.Point(241, 12)
         Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Size = New System.Drawing.Size(261, 154)
+        Me.GroupBox1.Size = New System.Drawing.Size(122, 78)
         Me.GroupBox1.TabIndex = 13
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "Position"
@@ -231,10 +235,10 @@ Partial Class main
         '
         'tb_serialOutput
         '
-        Me.tb_serialOutput.Location = New System.Drawing.Point(610, 12)
+        Me.tb_serialOutput.Location = New System.Drawing.Point(369, 12)
         Me.tb_serialOutput.Multiline = True
         Me.tb_serialOutput.Name = "tb_serialOutput"
-        Me.tb_serialOutput.Size = New System.Drawing.Size(366, 252)
+        Me.tb_serialOutput.Size = New System.Drawing.Size(366, 235)
         Me.tb_serialOutput.TabIndex = 23
         '
         'TextBox3
@@ -246,7 +250,7 @@ Partial Class main
         '
         'btn_G999
         '
-        Me.btn_G999.Location = New System.Drawing.Point(159, 318)
+        Me.btn_G999.Location = New System.Drawing.Point(12, 327)
         Me.btn_G999.Name = "btn_G999"
         Me.btn_G999.Size = New System.Drawing.Size(129, 23)
         Me.btn_G999.TabIndex = 25
@@ -255,7 +259,7 @@ Partial Class main
         '
         'btn_moveX10
         '
-        Me.btn_moveX10.Location = New System.Drawing.Point(159, 348)
+        Me.btn_moveX10.Location = New System.Drawing.Point(12, 357)
         Me.btn_moveX10.Name = "btn_moveX10"
         Me.btn_moveX10.Size = New System.Drawing.Size(129, 23)
         Me.btn_moveX10.TabIndex = 26
@@ -264,7 +268,7 @@ Partial Class main
         '
         'btn_moveX100Y200
         '
-        Me.btn_moveX100Y200.Location = New System.Drawing.Point(159, 377)
+        Me.btn_moveX100Y200.Location = New System.Drawing.Point(12, 386)
         Me.btn_moveX100Y200.Name = "btn_moveX100Y200"
         Me.btn_moveX100Y200.Size = New System.Drawing.Size(129, 23)
         Me.btn_moveX100Y200.TabIndex = 27
@@ -273,7 +277,7 @@ Partial Class main
         '
         'tb_GCodeProgramm
         '
-        Me.tb_GCodeProgramm.Location = New System.Drawing.Point(1034, 59)
+        Me.tb_GCodeProgramm.Location = New System.Drawing.Point(741, 12)
         Me.tb_GCodeProgramm.Multiline = True
         Me.tb_GCodeProgramm.Name = "tb_GCodeProgramm"
         Me.tb_GCodeProgramm.Size = New System.Drawing.Size(225, 323)
@@ -282,28 +286,46 @@ Partial Class main
         '
         'btn_tmpbutton
         '
-        Me.btn_tmpbutton.Location = New System.Drawing.Point(1184, 12)
+        Me.btn_tmpbutton.Location = New System.Drawing.Point(891, 450)
         Me.btn_tmpbutton.Name = "btn_tmpbutton"
         Me.btn_tmpbutton.Size = New System.Drawing.Size(75, 41)
         Me.btn_tmpbutton.TabIndex = 29
         Me.btn_tmpbutton.Text = "Button1"
         Me.btn_tmpbutton.UseVisualStyleBackColor = True
         '
-        'btn_sendProgramm
+        'btn_sendProgram
         '
-        Me.btn_sendProgramm.Location = New System.Drawing.Point(1155, 388)
-        Me.btn_sendProgramm.Name = "btn_sendProgramm"
-        Me.btn_sendProgramm.Size = New System.Drawing.Size(104, 30)
-        Me.btn_sendProgramm.TabIndex = 30
-        Me.btn_sendProgramm.Text = "send programm"
-        Me.btn_sendProgramm.UseVisualStyleBackColor = True
+        Me.btn_sendProgram.Location = New System.Drawing.Point(862, 341)
+        Me.btn_sendProgram.Name = "btn_sendProgram"
+        Me.btn_sendProgram.Size = New System.Drawing.Size(104, 30)
+        Me.btn_sendProgram.TabIndex = 30
+        Me.btn_sendProgram.Text = "send program"
+        Me.btn_sendProgram.UseVisualStyleBackColor = True
+        '
+        'btn_loadProgram
+        '
+        Me.btn_loadProgram.Location = New System.Drawing.Point(741, 341)
+        Me.btn_loadProgram.Name = "btn_loadProgram"
+        Me.btn_loadProgram.Size = New System.Drawing.Size(104, 30)
+        Me.btn_loadProgram.TabIndex = 31
+        Me.btn_loadProgram.Text = "load program"
+        Me.btn_loadProgram.UseVisualStyleBackColor = True
+        '
+        'NumericUpDown1
+        '
+        Me.NumericUpDown1.Location = New System.Drawing.Point(94, 276)
+        Me.NumericUpDown1.Name = "NumericUpDown1"
+        Me.NumericUpDown1.Size = New System.Drawing.Size(56, 20)
+        Me.NumericUpDown1.TabIndex = 32
         '
         'main
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(1271, 555)
-        Me.Controls.Add(Me.btn_sendProgramm)
+        Me.ClientSize = New System.Drawing.Size(988, 555)
+        Me.Controls.Add(Me.NumericUpDown1)
+        Me.Controls.Add(Me.btn_loadProgram)
+        Me.Controls.Add(Me.btn_sendProgram)
         Me.Controls.Add(Me.btn_tmpbutton)
         Me.Controls.Add(Me.tb_GCodeProgramm)
         Me.Controls.Add(Me.btn_moveX100Y200)
@@ -330,6 +352,7 @@ Partial Class main
         Me.Text = "hwCNC"
         Me.GroupBox1.ResumeLayout(False)
         Me.GroupBox1.PerformLayout()
+        CType(Me.NumericUpDown1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -360,6 +383,9 @@ Partial Class main
     Friend WithEvents btn_moveX100Y200 As System.Windows.Forms.Button
     Friend WithEvents tb_GCodeProgramm As System.Windows.Forms.TextBox
     Friend WithEvents btn_tmpbutton As System.Windows.Forms.Button
-    Friend WithEvents btn_sendProgramm As System.Windows.Forms.Button
+    Friend WithEvents btn_sendProgram As System.Windows.Forms.Button
+    Friend WithEvents btn_loadProgram As System.Windows.Forms.Button
+    Friend WithEvents ofd_GCODE As System.Windows.Forms.OpenFileDialog
+    Friend WithEvents NumericUpDown1 As System.Windows.Forms.NumericUpDown
 
 End Class
