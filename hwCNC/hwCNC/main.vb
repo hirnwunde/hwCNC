@@ -202,27 +202,27 @@ Public Class main
         SendCommand("G999")
     End Sub
 
-    Private Sub btn_moveXplus_Click(sender As System.Object, e As System.EventArgs) Handles btn_moveXplus.Click
-        
-            SendCommand("V121;")
+    Private Sub btn_moveXplus_Click(sender As System.Object, e As System.EventArgs)
+
+        SendCommand("V121;")
 
     End Sub
 
-    Private Sub btn_moveXminus_Click(sender As System.Object, e As System.EventArgs) Handles btn_moveXminus.Click
-        
-            SendCommand("V122;")
+    Private Sub btn_moveXminus_Click(sender As System.Object, e As System.EventArgs)
+
+        SendCommand("V122;")
 
     End Sub
 
-    Private Sub btn_moveYminus_Click(sender As System.Object, e As System.EventArgs) Handles btn_moveYminus.Click
-       
-            SendCommand("V123;")
+    Private Sub btn_moveYminus_Click(sender As System.Object, e As System.EventArgs)
+
+        SendCommand("V123;")
 
     End Sub
 
-    Private Sub btn_moveYplus_Click(sender As System.Object, e As System.EventArgs) Handles btn_moveYplus.Click
-       
-            SendCommand("V124;")
+    Private Sub btn_moveYplus_Click(sender As System.Object, e As System.EventArgs)
+
+        SendCommand("V124;")
 
     End Sub
 
@@ -331,82 +331,104 @@ Public Class main
 
     End Sub
 
-    'Private Sub btn_cleanGCode_Click(sender As System.Object, e As System.EventArgs) Handles btn_cleanGCode.Click
+    Private Sub btn_cleanGCode_Click(sender As System.Object, e As System.EventArgs) Handles btn_cleanGCode.Click
 
-    '    Dim actline() As String
-    '    Dim linecnt As Int32 = 1
-    '    Dim whichCMD As String
-    '    Dim GCMDSupported As Boolean = False
-    '    Dim MCMDSupported As Boolean = False
-    '    Dim GorMCommand As String = "UNDEF"
-    '    Dim dblVal As Double
-    '    Dim MoreThanTwo As String
-    '    Dim newline As String = ""
+        Dim actline() As String
+        Dim linecnt As Int32 = 1
+        Dim whichCMD As String
+        Dim GCMDSupported As Boolean = False
+        Dim MCMDSupported As Boolean = False
+        Dim GorMCommand As String = "UNDEF"
+        Dim dblVal As Double
+        Dim MoreThanTwo As String
+        Dim newline As String = ""
+        Dim thisX As String = ""
+        Dim thisY As String = ""
+        Dim thisF As String = ""
 
-
-    '    For Each line As String In tb_GCodeProgramm.Lines
-
-
-    '        actline = Split(line, " ") ' split lines by spaces
-
-    '        For Each ele As String In actline
-
-    '            If ele.ToUpper.StartsWith("G") Then
-    '                ' we have a G-Command
-    '                GorMCommand = "G"
-    '                whichCMD = ele.Remove(0, 1)
-    '                If whichCMD = "0" Or whichCMD = "1" Or
-    '                   whichCMD = "4" Or whichCMD = "28" Or
-    '                   whichCMD = "90" Or whichCMD = "91" Or
-    '                   whichCMD = "92" Or whichCMD = "999" Then
-    '                    GCMDSupported = True
-    '                Else
-    '                    GCMDSupported = False
-    '                End If
-
-    '            End If
-
-    '            If ele.ToUpper.StartsWith("M") Then
-    '                ' we have a M-Command
-    '                GorMCommand = "M"
-    '                whichCMD = ele.Remove(0, 1)
-    '                If whichCMD = "18" Or whichCMD = "100" Or whichCMD = "114" Then
-    '                    MCMDSupported = True
-    '                Else
-    '                    MCMDSupported = False
-    '                End If
-    '            End If
-
-    '            If ele.ToUpper.StartsWith("X") Or ele.ToUpper.StartsWith("Y") Then
-    '                If ele.EndsWith(";") Then ele.Remove(ele.Length - 1)
-    '                MoreThanTwo = ele.Remove(0, 1)
-    '                If Double.TryParse(MoreThanTwo, dblVal) Then
-
-    '                    MoreThanTwo = Format(MoreThanTwo, "0.00")
-    '                    'String.Format("{0:n2}", MoreThanTwo)
-
-    '                End If
-    '            End If
+        For Each line As String In tb_GCodeProgramm.Lines
 
 
-    '            If Not MCMDSupported And GorMCommand = "M" Then
-    '                ListBox1.Items.Add("M-Command in line " + linecnt.ToString + " not supported!")
-    '                Exit For
-    '            End If
+            actline = Split(line, " ") ' split lines by spaces
 
-    '            If Not GCMDSupported And GorMCommand = "G" Then
-    '                ListBox1.Items.Add("G-Command in line " + linecnt.ToString + " not supported!")
-    '                Exit For
-    '            End If
+            For Each ele As String In actline
 
-    '            newline = ele + " "
+                If ele.ToUpper.StartsWith("G") Then
+                    ' we have a G-Command
+                    GorMCommand = "G"
+                    whichCMD = ele.Remove(0, 1)
+                    If whichCMD = "0" Or whichCMD = "1" Or
+                       whichCMD = "4" Or whichCMD = "28" Or
+                       whichCMD = "90" Or whichCMD = "91" Or
+                       whichCMD = "92" Or whichCMD = "999" Then
 
-    '        Next
+                        GCMDSupported = True
 
-    '        TextBox1.AppendText(newline + vbCrLf)
-    '        linecnt = linecnt + 1
-    '    Next
 
-    'End Sub
+                    Else
+                        GCMDSupported = False
+                    End If
 
+                End If
+
+                If ele.ToUpper.StartsWith("M") Then
+                    ' we have a M-Command
+                    GorMCommand = "M"
+                    whichCMD = ele.Remove(0, 1)
+                    If whichCMD = "18" Or whichCMD = "100" Or whichCMD = "114" Then
+                        MCMDSupported = True
+                    Else
+                        MCMDSupported = False
+                    End If
+                End If
+
+                ' alle nachkommastellen nach der zweiten stelle abschneiden
+                If ele.ToUpper.StartsWith("X") Then
+                    If ele.EndsWith(";") Then ele.Remove(ele.Length - 1)
+                    MoreThanTwo = ele.Remove(0, 1)
+                    If Double.TryParse(MoreThanTwo, dblVal) Then
+
+                        thisX = Format(MoreThanTwo, "0.00")
+
+                    End If
+                End If
+                If ele.ToUpper.StartsWith("Y") Then
+                    If ele.EndsWith(";") Then ele.Remove(ele.Length - 1)
+                    MoreThanTwo = ele.Remove(0, 1)
+                    If Double.TryParse(MoreThanTwo, dblVal) Then
+
+                        thisY = Format(MoreThanTwo, "0.00")
+
+                    End If
+                End If
+
+                If ele.ToUpper.StartsWith("F") Then
+                    If ele.EndsWith(";") Then ele.Remove(ele.Length - 1)
+
+
+
+                End If
+
+
+                If Not MCMDSupported And GorMCommand = "M" Then
+                    ListBox1.Items.Add("M-Command in line " + linecnt.ToString + " not supported!")
+                    Exit For
+                End If
+
+                If Not GCMDSupported And GorMCommand = "G" Then
+                    ListBox1.Items.Add("G-Command in line " + linecnt.ToString + " not supported!")
+                    Exit For
+                End If
+
+                newline = ele + " "
+
+            Next
+
+            TextBox1.AppendText(newline + vbCrLf)
+            linecnt = linecnt + 1
+        Next
+
+    End Sub
+
+    
 End Class

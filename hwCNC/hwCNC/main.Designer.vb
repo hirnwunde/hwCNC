@@ -26,10 +26,6 @@ Partial Class main
         Me.lb_serialOutput = New System.Windows.Forms.ListBox()
         Me.cb_COMPort = New System.Windows.Forms.ComboBox()
         Me.btn_RefreshCOMPort = New System.Windows.Forms.Button()
-        Me.btn_moveXplus = New System.Windows.Forms.Button()
-        Me.btn_moveXminus = New System.Windows.Forms.Button()
-        Me.btn_moveYminus = New System.Windows.Forms.Button()
-        Me.btn_moveYplus = New System.Windows.Forms.Button()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.tb_ActPosX = New System.Windows.Forms.TextBox()
         Me.tb_ActPosY = New System.Windows.Forms.TextBox()
@@ -49,17 +45,11 @@ Partial Class main
         Me.btn_sendProgram = New System.Windows.Forms.Button()
         Me.btn_loadProgram = New System.Windows.Forms.Button()
         Me.ofd_GCODE = New System.Windows.Forms.OpenFileDialog()
-        Me.GroupBox2 = New System.Windows.Forms.GroupBox()
-        Me.Button1 = New System.Windows.Forms.Button()
-        Me.Button2 = New System.Windows.Forms.Button()
-        Me.Button3 = New System.Windows.Forms.Button()
-        Me.Button4 = New System.Windows.Forms.Button()
         Me.btn_MoreOrLess = New System.Windows.Forms.Button()
         Me.btn_cleanGCode = New System.Windows.Forms.Button()
         Me.ListBox1 = New System.Windows.Forms.ListBox()
         Me.TextBox1 = New System.Windows.Forms.TextBox()
         Me.GroupBox1.SuspendLayout()
-        Me.GroupBox2.SuspendLayout()
         Me.SuspendLayout()
         '
         'btn_ConnectToSelectedPort
@@ -95,46 +85,6 @@ Partial Class main
         Me.btn_RefreshCOMPort.TabIndex = 3
         Me.btn_RefreshCOMPort.Text = "refresh"
         Me.btn_RefreshCOMPort.UseVisualStyleBackColor = True
-        '
-        'btn_moveXplus
-        '
-        Me.btn_moveXplus.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btn_moveXplus.Location = New System.Drawing.Point(6, 19)
-        Me.btn_moveXplus.Name = "btn_moveXplus"
-        Me.btn_moveXplus.Size = New System.Drawing.Size(53, 40)
-        Me.btn_moveXplus.TabIndex = 4
-        Me.btn_moveXplus.Text = "X + 1"
-        Me.btn_moveXplus.UseVisualStyleBackColor = True
-        '
-        'btn_moveXminus
-        '
-        Me.btn_moveXminus.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btn_moveXminus.Location = New System.Drawing.Point(6, 65)
-        Me.btn_moveXminus.Name = "btn_moveXminus"
-        Me.btn_moveXminus.Size = New System.Drawing.Size(53, 40)
-        Me.btn_moveXminus.TabIndex = 5
-        Me.btn_moveXminus.Text = "X - 1"
-        Me.btn_moveXminus.UseVisualStyleBackColor = True
-        '
-        'btn_moveYminus
-        '
-        Me.btn_moveYminus.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btn_moveYminus.Location = New System.Drawing.Point(65, 65)
-        Me.btn_moveYminus.Name = "btn_moveYminus"
-        Me.btn_moveYminus.Size = New System.Drawing.Size(53, 40)
-        Me.btn_moveYminus.TabIndex = 7
-        Me.btn_moveYminus.Text = "Y - 1"
-        Me.btn_moveYminus.UseVisualStyleBackColor = True
-        '
-        'btn_moveYplus
-        '
-        Me.btn_moveYplus.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btn_moveYplus.Location = New System.Drawing.Point(65, 19)
-        Me.btn_moveYplus.Name = "btn_moveYplus"
-        Me.btn_moveYplus.Size = New System.Drawing.Size(53, 40)
-        Me.btn_moveYplus.TabIndex = 6
-        Me.btn_moveYplus.Text = "Y + 1"
-        Me.btn_moveYplus.UseVisualStyleBackColor = True
         '
         'Label1
         '
@@ -299,63 +249,6 @@ Partial Class main
         Me.btn_loadProgram.Text = "load program"
         Me.btn_loadProgram.UseVisualStyleBackColor = True
         '
-        'GroupBox2
-        '
-        Me.GroupBox2.Controls.Add(Me.Button1)
-        Me.GroupBox2.Controls.Add(Me.Button2)
-        Me.GroupBox2.Controls.Add(Me.Button3)
-        Me.GroupBox2.Controls.Add(Me.Button4)
-        Me.GroupBox2.Controls.Add(Me.btn_moveYminus)
-        Me.GroupBox2.Controls.Add(Me.btn_moveXplus)
-        Me.GroupBox2.Controls.Add(Me.btn_moveXminus)
-        Me.GroupBox2.Controls.Add(Me.btn_moveYplus)
-        Me.GroupBox2.Location = New System.Drawing.Point(34, 384)
-        Me.GroupBox2.Name = "GroupBox2"
-        Me.GroupBox2.Size = New System.Drawing.Size(301, 119)
-        Me.GroupBox2.TabIndex = 32
-        Me.GroupBox2.TabStop = False
-        Me.GroupBox2.Text = "Movement"
-        '
-        'Button1
-        '
-        Me.Button1.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Button1.Location = New System.Drawing.Point(234, 65)
-        Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(53, 40)
-        Me.Button1.TabIndex = 11
-        Me.Button1.Text = "Y - 10"
-        Me.Button1.UseVisualStyleBackColor = True
-        '
-        'Button2
-        '
-        Me.Button2.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Button2.Location = New System.Drawing.Point(175, 19)
-        Me.Button2.Name = "Button2"
-        Me.Button2.Size = New System.Drawing.Size(53, 40)
-        Me.Button2.TabIndex = 8
-        Me.Button2.Text = "X + 10"
-        Me.Button2.UseVisualStyleBackColor = True
-        '
-        'Button3
-        '
-        Me.Button3.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Button3.Location = New System.Drawing.Point(175, 65)
-        Me.Button3.Name = "Button3"
-        Me.Button3.Size = New System.Drawing.Size(53, 40)
-        Me.Button3.TabIndex = 9
-        Me.Button3.Text = "X - 10"
-        Me.Button3.UseVisualStyleBackColor = True
-        '
-        'Button4
-        '
-        Me.Button4.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Button4.Location = New System.Drawing.Point(234, 19)
-        Me.Button4.Name = "Button4"
-        Me.Button4.Size = New System.Drawing.Size(53, 40)
-        Me.Button4.TabIndex = 10
-        Me.Button4.Text = "Y + 10"
-        Me.Button4.UseVisualStyleBackColor = True
-        '
         'btn_MoreOrLess
         '
         Me.btn_MoreOrLess.Location = New System.Drawing.Point(500, 519)
@@ -399,7 +292,6 @@ Partial Class main
         Me.Controls.Add(Me.ListBox1)
         Me.Controls.Add(Me.btn_cleanGCode)
         Me.Controls.Add(Me.btn_MoreOrLess)
-        Me.Controls.Add(Me.GroupBox2)
         Me.Controls.Add(Me.btn_loadProgram)
         Me.Controls.Add(Me.btn_sendProgram)
         Me.Controls.Add(Me.btn_tmpbutton)
@@ -422,7 +314,6 @@ Partial Class main
         Me.Text = "hwCNC"
         Me.GroupBox1.ResumeLayout(False)
         Me.GroupBox1.PerformLayout()
-        Me.GroupBox2.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -431,10 +322,6 @@ Partial Class main
     Friend WithEvents lb_serialOutput As System.Windows.Forms.ListBox
     Friend WithEvents cb_COMPort As System.Windows.Forms.ComboBox
     Friend WithEvents btn_RefreshCOMPort As System.Windows.Forms.Button
-    Friend WithEvents btn_moveXplus As System.Windows.Forms.Button
-    Friend WithEvents btn_moveXminus As System.Windows.Forms.Button
-    Friend WithEvents btn_moveYminus As System.Windows.Forms.Button
-    Friend WithEvents btn_moveYplus As System.Windows.Forms.Button
     Friend WithEvents Label1 As System.Windows.Forms.Label
     Friend WithEvents tb_ActPosX As System.Windows.Forms.TextBox
     Friend WithEvents tb_ActPosY As System.Windows.Forms.TextBox
@@ -454,11 +341,6 @@ Partial Class main
     Friend WithEvents btn_sendProgram As System.Windows.Forms.Button
     Friend WithEvents btn_loadProgram As System.Windows.Forms.Button
     Friend WithEvents ofd_GCODE As System.Windows.Forms.OpenFileDialog
-    Friend WithEvents GroupBox2 As System.Windows.Forms.GroupBox
-    Friend WithEvents Button1 As System.Windows.Forms.Button
-    Friend WithEvents Button2 As System.Windows.Forms.Button
-    Friend WithEvents Button3 As System.Windows.Forms.Button
-    Friend WithEvents Button4 As System.Windows.Forms.Button
     Friend WithEvents btn_MoreOrLess As System.Windows.Forms.Button
     Friend WithEvents btn_cleanGCode As System.Windows.Forms.Button
     Friend WithEvents ListBox1 As System.Windows.Forms.ListBox
