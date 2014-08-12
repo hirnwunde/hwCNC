@@ -23,6 +23,9 @@ Public Class main
         tb_ActPosY.ReadOnly = True
 
         btn_CloseComPort.Enabled = False
+
+        System.Globalization.CultureInfo.CreateSpecificCulture("en-US")
+
     End Sub
 
     Private Sub refreshCOMPort()
@@ -333,18 +336,22 @@ Public Class main
 
     Private Sub btn_cleanGCode_Click(sender As System.Object, e As System.EventArgs) Handles btn_cleanGCode.Click
 
-        Dim actline() As String
-        Dim linecnt As Int32 = 1
-        Dim whichCMD As String
         Dim GCMDSupported As Boolean = False
         Dim MCMDSupported As Boolean = False
+        Dim linecnt As Int32 = 1
+
+        Dim actline() As String
+        Dim whichCMD As String
         Dim GorMCommand As String = "UNDEF"
         Dim dblVal As Double
-        Dim MoreThanTwo As String
+        Dim MoreThanTwo As Double
         Dim newline As String = ""
         Dim thisX As String = ""
         Dim thisY As String = ""
         Dim thisF As String = ""
+
+        TextBox1.Clear()
+        ListBox1.Items.Clear()
 
         For Each line As String In tb_GCodeProgramm.Lines
 
@@ -364,6 +371,7 @@ Public Class main
 
                         GCMDSupported = True
 
+                        newline = newline + ele
 
                     Else
                         GCMDSupported = False
@@ -377,6 +385,9 @@ Public Class main
                     whichCMD = ele.Remove(0, 1)
                     If whichCMD = "18" Or whichCMD = "100" Or whichCMD = "114" Then
                         MCMDSupported = True
+
+                        newline = newline + ele
+
                     Else
                         MCMDSupported = False
                     End If
@@ -385,19 +396,28 @@ Public Class main
                 ' alle nachkommastellen nach der zweiten stelle abschneiden
                 If ele.ToUpper.StartsWith("X") Then
                     If ele.EndsWith(";") Then ele.Remove(ele.Length - 1)
-                    MoreThanTwo = ele.Remove(0, 1)
+                    MoreThanTwo = CDbl(ele.Remove(0, 1))
                     If Double.TryParse(MoreThanTwo, dblVal) Then
 
                         thisX = Format(MoreThanTwo, "0.00")
+                        newline = newline + " X" + thisX
 
                     End If
                 End If
                 If ele.ToUpper.StartsWith("Y") Then
-                    If ele.EndsWith(";") Then ele.Remove(ele.Length - 1)
-                    MoreThanTwo = ele.Remove(0, 1)
+
+                    thisY = ele.Remove(0, 1) ' cut "Y"
+                    thisY.Trim()
+
+                    If thisY.EndsWith(";") Then
+                        thisY = thisY.Remove(thisY.Length - 1, 1) ' cut ";"
+                    End If
+
+                    MoreThanTwo = CDbl(thisY)
                     If Double.TryParse(MoreThanTwo, dblVal) Then
 
                         thisY = Format(MoreThanTwo, "0.00")
+                        newline = newline + " Y" + thisY
 
                     End If
                 End If
@@ -405,10 +425,10 @@ Public Class main
                 If ele.ToUpper.StartsWith("F") Then
                     If ele.EndsWith(";") Then ele.Remove(ele.Length - 1)
 
+                    newline = newline + " " + ele
 
 
                 End If
-
 
                 If Not MCMDSupported And GorMCommand = "M" Then
                     ListBox1.Items.Add("M-Command in line " + linecnt.ToString + " not supported!")
@@ -420,15 +440,50 @@ Public Class main
                     Exit For
                 End If
 
-                newline = ele + " "
 
             Next
 
-            TextBox1.AppendText(newline + vbCrLf)
+            If newline.Length <> 0 Then
+                lbox_PrgCodeCleaned.Items.Add(newline)
+                TextBox1.AppendText(newline + vbCrLf)
+
+            End If
             linecnt = linecnt + 1
+            newline = ""
         Next
 
     End Sub
 
     
+    Private Sub btn_OpenManOp_Click(sender As System.Object, e As System.EventArgs) Handles btn_OpenManOp.Click
+        ManOp.StartPosition = FormStartPosition.Manual
+
+        ManOp.Location = New Point(25, 200)
+
+        ManOp.Show()
+    End Sub
+
+    Private Sub Button1_Click(sender As System.Object, e As System.EventArgs)
+
+        ' {X=232,Y=323}
+        Dim loc, tmpposy As String
+        Dim posX, posY As Int16
+        Dim loc2() As String
+
+        loc = Me.Location.ToString
+        loc2 = loc.Split(",")
+
+        ' loc(0) = {X=232
+        ' loc(1) = Y=232}
+        posX = CInt(loc2(0).Remove(0, 3))
+        tmpposy = loc2(1).Remove(0, 2)
+        posY = CInt(tmpposy.Remove(tmpposy.Length - 1, 1))
+
+
+
+        MsgBox(posX.ToString + " - " + posY.ToString)
+
+
+    End Sub
+
 End Class

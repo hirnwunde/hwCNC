@@ -49,6 +49,8 @@ Partial Class main
         Me.btn_cleanGCode = New System.Windows.Forms.Button()
         Me.ListBox1 = New System.Windows.Forms.ListBox()
         Me.TextBox1 = New System.Windows.Forms.TextBox()
+        Me.btn_OpenManOp = New System.Windows.Forms.Button()
+        Me.lbox_PrgCodeCleaned = New System.Windows.Forms.ListBox()
         Me.GroupBox1.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -188,7 +190,7 @@ Partial Class main
         '
         'btn_G999
         '
-        Me.btn_G999.Location = New System.Drawing.Point(392, 407)
+        Me.btn_G999.Location = New System.Drawing.Point(13, 357)
         Me.btn_G999.Name = "btn_G999"
         Me.btn_G999.Size = New System.Drawing.Size(129, 23)
         Me.btn_G999.TabIndex = 25
@@ -197,7 +199,7 @@ Partial Class main
         '
         'btn_moveX10
         '
-        Me.btn_moveX10.Location = New System.Drawing.Point(392, 437)
+        Me.btn_moveX10.Location = New System.Drawing.Point(13, 387)
         Me.btn_moveX10.Name = "btn_moveX10"
         Me.btn_moveX10.Size = New System.Drawing.Size(129, 23)
         Me.btn_moveX10.TabIndex = 26
@@ -206,7 +208,7 @@ Partial Class main
         '
         'btn_moveX100Y200
         '
-        Me.btn_moveX100Y200.Location = New System.Drawing.Point(392, 466)
+        Me.btn_moveX100Y200.Location = New System.Drawing.Point(13, 416)
         Me.btn_moveX100Y200.Name = "btn_moveX100Y200"
         Me.btn_moveX100Y200.Size = New System.Drawing.Size(129, 23)
         Me.btn_moveX100Y200.TabIndex = 27
@@ -220,7 +222,8 @@ Partial Class main
         Me.tb_GCodeProgramm.Name = "tb_GCodeProgramm"
         Me.tb_GCodeProgramm.Size = New System.Drawing.Size(225, 192)
         Me.tb_GCodeProgramm.TabIndex = 28
-        Me.tb_GCodeProgramm.Text = "G1 X1 Y0 F200;" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "G1 X2 Y30;" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "G1 X3 Y40;" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "M30;"
+        Me.tb_GCodeProgramm.Text = "G1 X1 Y1 F200;" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "G1 X2 Y2;" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "G1 X3 Y3;" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "G2 X4 Y4 I4 J4 F75;" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "G1 X5 Y5;" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "G3 X6 Y6 I6" & _
+    " J6 F75;" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "G1 X7 Y7;" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "M30;"
         '
         'btn_tmpbutton
         '
@@ -277,17 +280,39 @@ Partial Class main
         '
         'TextBox1
         '
+        Me.TextBox1.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.TextBox1.Location = New System.Drawing.Point(350, 247)
         Me.TextBox1.Multiline = True
         Me.TextBox1.Name = "TextBox1"
-        Me.TextBox1.Size = New System.Drawing.Size(223, 119)
+        Me.TextBox1.ScrollBars = System.Windows.Forms.ScrollBars.Both
+        Me.TextBox1.Size = New System.Drawing.Size(223, 223)
         Me.TextBox1.TabIndex = 36
+        '
+        'btn_OpenManOp
+        '
+        Me.btn_OpenManOp.Font = New System.Drawing.Font("Microsoft Sans Serif", 15.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btn_OpenManOp.Location = New System.Drawing.Point(380, 476)
+        Me.btn_OpenManOp.Name = "btn_OpenManOp"
+        Me.btn_OpenManOp.Size = New System.Drawing.Size(114, 66)
+        Me.btn_OpenManOp.TabIndex = 37
+        Me.btn_OpenManOp.Text = "manual operation"
+        Me.btn_OpenManOp.UseVisualStyleBackColor = True
+        '
+        'lbox_PrgCodeCleaned
+        '
+        Me.lbox_PrgCodeCleaned.FormattingEnabled = True
+        Me.lbox_PrgCodeCleaned.Location = New System.Drawing.Point(13, 599)
+        Me.lbox_PrgCodeCleaned.Name = "lbox_PrgCodeCleaned"
+        Me.lbox_PrgCodeCleaned.Size = New System.Drawing.Size(120, 17)
+        Me.lbox_PrgCodeCleaned.TabIndex = 38
         '
         'main
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(585, 555)
+        Me.ClientSize = New System.Drawing.Size(584, 640)
+        Me.Controls.Add(Me.lbox_PrgCodeCleaned)
+        Me.Controls.Add(Me.btn_OpenManOp)
         Me.Controls.Add(Me.TextBox1)
         Me.Controls.Add(Me.ListBox1)
         Me.Controls.Add(Me.btn_cleanGCode)
@@ -310,6 +335,7 @@ Partial Class main
         Me.Controls.Add(Me.cb_COMPort)
         Me.Controls.Add(Me.lb_serialOutput)
         Me.Controls.Add(Me.btn_ConnectToSelectedPort)
+        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog
         Me.Name = "main"
         Me.Text = "hwCNC"
         Me.GroupBox1.ResumeLayout(False)
@@ -345,5 +371,7 @@ Partial Class main
     Friend WithEvents btn_cleanGCode As System.Windows.Forms.Button
     Friend WithEvents ListBox1 As System.Windows.Forms.ListBox
     Friend WithEvents TextBox1 As System.Windows.Forms.TextBox
+    Friend WithEvents btn_OpenManOp As System.Windows.Forms.Button
+    Friend WithEvents lbox_PrgCodeCleaned As System.Windows.Forms.ListBox
 
 End Class
