@@ -276,11 +276,11 @@ Public Class main
     Private Sub btn_MoreOrLess_Click(sender As System.Object, e As System.EventArgs) Handles btn_MoreOrLess.Click
 
         If folded Then
-            Me.Size = New Size(989, 600)
+            Me.Size = New Size(989, 550)
             folded = False
             btn_MoreOrLess.Text = "<<< less"
         Else
-            Me.Size = New Size(600, 600)
+            Me.Size = New Size(590, 550)
             folded = True
             btn_MoreOrLess.Text = "more >>>"
         End If

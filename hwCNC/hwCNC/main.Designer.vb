@@ -56,13 +56,13 @@ Partial Class main
         Me.HelpToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.LogToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.AboutToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ManualOperationsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.GroupBox2 = New System.Windows.Forms.GroupBox()
         Me.GroupBox3 = New System.Windows.Forms.GroupBox()
         Me.SplitContainer1 = New System.Windows.Forms.SplitContainer()
-        Me.ManualOperationsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.SendSingleCommandToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.GroupBox4 = New System.Windows.Forms.GroupBox()
         Me.btn_tmpbutton = New System.Windows.Forms.Button()
+        Me.GroupBox5 = New System.Windows.Forms.GroupBox()
         Me.GroupBox1.SuspendLayout()
         Me.MenuStrip1.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
@@ -72,6 +72,7 @@ Partial Class main
         Me.SplitContainer1.Panel2.SuspendLayout()
         Me.SplitContainer1.SuspendLayout()
         Me.GroupBox4.SuspendLayout()
+        Me.GroupBox5.SuspendLayout()
         Me.SuspendLayout()
         '
         'btn_ConnectToSelectedPort
@@ -178,18 +179,18 @@ Partial Class main
         '
         'tb_single_command
         '
-        Me.tb_single_command.Location = New System.Drawing.Point(12, 512)
+        Me.tb_single_command.Location = New System.Drawing.Point(6, 19)
         Me.tb_single_command.Name = "tb_single_command"
-        Me.tb_single_command.Size = New System.Drawing.Size(278, 20)
+        Me.tb_single_command.Size = New System.Drawing.Size(344, 20)
         Me.tb_single_command.TabIndex = 21
         '
         'btn_sendSingleCommand
         '
-        Me.btn_sendSingleCommand.Location = New System.Drawing.Point(300, 512)
+        Me.btn_sendSingleCommand.Location = New System.Drawing.Point(116, 45)
         Me.btn_sendSingleCommand.Name = "btn_sendSingleCommand"
-        Me.btn_sendSingleCommand.Size = New System.Drawing.Size(72, 23)
+        Me.btn_sendSingleCommand.Size = New System.Drawing.Size(140, 23)
         Me.btn_sendSingleCommand.TabIndex = 22
-        Me.btn_sendSingleCommand.Text = "senden"
+        Me.btn_sendSingleCommand.Text = "send"
         Me.btn_sendSingleCommand.UseVisualStyleBackColor = True
         '
         'tb_serialOutput
@@ -197,7 +198,7 @@ Partial Class main
         Me.tb_serialOutput.Location = New System.Drawing.Point(6, 12)
         Me.tb_serialOutput.Multiline = True
         Me.tb_serialOutput.Name = "tb_serialOutput"
-        Me.tb_serialOutput.Size = New System.Drawing.Size(344, 514)
+        Me.tb_serialOutput.Size = New System.Drawing.Size(344, 384)
         Me.tb_serialOutput.TabIndex = 23
         '
         'btn_G999
@@ -241,7 +242,7 @@ Partial Class main
         '
         'btn_sendProgram
         '
-        Me.btn_sendProgram.Location = New System.Drawing.Point(489, 478)
+        Me.btn_sendProgram.Location = New System.Drawing.Point(18, 478)
         Me.btn_sendProgram.Name = "btn_sendProgram"
         Me.btn_sendProgram.Size = New System.Drawing.Size(83, 30)
         Me.btn_sendProgram.TabIndex = 30
@@ -250,7 +251,7 @@ Partial Class main
         '
         'btn_MoreOrLess
         '
-        Me.btn_MoreOrLess.Location = New System.Drawing.Point(497, 537)
+        Me.btn_MoreOrLess.Location = New System.Drawing.Point(497, 485)
         Me.btn_MoreOrLess.Name = "btn_MoreOrLess"
         Me.btn_MoreOrLess.Size = New System.Drawing.Size(75, 23)
         Me.btn_MoreOrLess.TabIndex = 33
@@ -269,10 +270,10 @@ Partial Class main
         '
         'MenuStrip1
         '
-        Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.FileToolStripMenuItem, Me.HelpToolStripMenuItem, Me.ManualOperationsToolStripMenuItem, Me.SendSingleCommandToolStripMenuItem})
+        Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.FileToolStripMenuItem, Me.HelpToolStripMenuItem, Me.ManualOperationsToolStripMenuItem})
         Me.MenuStrip1.Location = New System.Drawing.Point(0, 0)
         Me.MenuStrip1.Name = "MenuStrip1"
-        Me.MenuStrip1.Size = New System.Drawing.Size(594, 24)
+        Me.MenuStrip1.Size = New System.Drawing.Size(584, 24)
         Me.MenuStrip1.TabIndex = 39
         Me.MenuStrip1.Text = "MenuStrip1"
         '
@@ -280,50 +281,50 @@ Partial Class main
         '
         Me.FileToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.LoadNCProgramToolStripMenuItem, Me.SavecleanedNCProgramToolStripMenuItem, Me.OptionsToolStripMenuItem, Me.QuitToolStripMenuItem})
         Me.FileToolStripMenuItem.Name = "FileToolStripMenuItem"
-        Me.FileToolStripMenuItem.Size = New System.Drawing.Size(39, 20)
+        Me.FileToolStripMenuItem.Size = New System.Drawing.Size(37, 20)
         Me.FileToolStripMenuItem.Text = "File"
         '
         'LoadNCProgramToolStripMenuItem
         '
         Me.LoadNCProgramToolStripMenuItem.Name = "LoadNCProgramToolStripMenuItem"
-        Me.LoadNCProgramToolStripMenuItem.Size = New System.Drawing.Size(222, 22)
+        Me.LoadNCProgramToolStripMenuItem.Size = New System.Drawing.Size(220, 22)
         Me.LoadNCProgramToolStripMenuItem.Text = "load NC-Program"
         '
         'SavecleanedNCProgramToolStripMenuItem
         '
         Me.SavecleanedNCProgramToolStripMenuItem.Name = "SavecleanedNCProgramToolStripMenuItem"
-        Me.SavecleanedNCProgramToolStripMenuItem.Size = New System.Drawing.Size(222, 22)
+        Me.SavecleanedNCProgramToolStripMenuItem.Size = New System.Drawing.Size(220, 22)
         Me.SavecleanedNCProgramToolStripMenuItem.Text = "save (cleaned) NC-Program"
         '
         'OptionsToolStripMenuItem
         '
         Me.OptionsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ShowToolStripMenuItem, Me.LoadToolStripMenuItem, Me.SaveToolStripMenuItem})
         Me.OptionsToolStripMenuItem.Name = "OptionsToolStripMenuItem"
-        Me.OptionsToolStripMenuItem.Size = New System.Drawing.Size(222, 22)
+        Me.OptionsToolStripMenuItem.Size = New System.Drawing.Size(220, 22)
         Me.OptionsToolStripMenuItem.Text = "Options"
         '
         'ShowToolStripMenuItem
         '
         Me.ShowToolStripMenuItem.Name = "ShowToolStripMenuItem"
-        Me.ShowToolStripMenuItem.Size = New System.Drawing.Size(103, 22)
+        Me.ShowToolStripMenuItem.Size = New System.Drawing.Size(102, 22)
         Me.ShowToolStripMenuItem.Text = "show"
         '
         'LoadToolStripMenuItem
         '
         Me.LoadToolStripMenuItem.Name = "LoadToolStripMenuItem"
-        Me.LoadToolStripMenuItem.Size = New System.Drawing.Size(103, 22)
+        Me.LoadToolStripMenuItem.Size = New System.Drawing.Size(102, 22)
         Me.LoadToolStripMenuItem.Text = "load"
         '
         'SaveToolStripMenuItem
         '
         Me.SaveToolStripMenuItem.Name = "SaveToolStripMenuItem"
-        Me.SaveToolStripMenuItem.Size = New System.Drawing.Size(103, 22)
+        Me.SaveToolStripMenuItem.Size = New System.Drawing.Size(102, 22)
         Me.SaveToolStripMenuItem.Text = "save"
         '
         'QuitToolStripMenuItem
         '
         Me.QuitToolStripMenuItem.Name = "QuitToolStripMenuItem"
-        Me.QuitToolStripMenuItem.Size = New System.Drawing.Size(222, 22)
+        Me.QuitToolStripMenuItem.Size = New System.Drawing.Size(220, 22)
         Me.QuitToolStripMenuItem.Text = "Close"
         '
         'HelpToolStripMenuItem
@@ -338,14 +339,20 @@ Partial Class main
         'LogToolStripMenuItem
         '
         Me.LogToolStripMenuItem.Name = "LogToolStripMenuItem"
-        Me.LogToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.LogToolStripMenuItem.Size = New System.Drawing.Size(107, 22)
         Me.LogToolStripMenuItem.Text = "Log"
         '
         'AboutToolStripMenuItem
         '
         Me.AboutToolStripMenuItem.Name = "AboutToolStripMenuItem"
-        Me.AboutToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.AboutToolStripMenuItem.Size = New System.Drawing.Size(107, 22)
         Me.AboutToolStripMenuItem.Text = "About"
+        '
+        'ManualOperationsToolStripMenuItem
+        '
+        Me.ManualOperationsToolStripMenuItem.Name = "ManualOperationsToolStripMenuItem"
+        Me.ManualOperationsToolStripMenuItem.Size = New System.Drawing.Size(118, 20)
+        Me.ManualOperationsToolStripMenuItem.Text = "manual operations"
         '
         'GroupBox2
         '
@@ -389,24 +396,12 @@ Partial Class main
         Me.SplitContainer1.SplitterDistance = 278
         Me.SplitContainer1.TabIndex = 0
         '
-        'ManualOperationsToolStripMenuItem
-        '
-        Me.ManualOperationsToolStripMenuItem.Name = "ManualOperationsToolStripMenuItem"
-        Me.ManualOperationsToolStripMenuItem.Size = New System.Drawing.Size(123, 20)
-        Me.ManualOperationsToolStripMenuItem.Text = "manual operations"
-        '
-        'SendSingleCommandToolStripMenuItem
-        '
-        Me.SendSingleCommandToolStripMenuItem.Name = "SendSingleCommandToolStripMenuItem"
-        Me.SendSingleCommandToolStripMenuItem.Size = New System.Drawing.Size(138, 20)
-        Me.SendSingleCommandToolStripMenuItem.Text = "send single command"
-        '
         'GroupBox4
         '
         Me.GroupBox4.Controls.Add(Me.tb_serialOutput)
         Me.GroupBox4.Location = New System.Drawing.Point(615, 28)
         Me.GroupBox4.Name = "GroupBox4"
-        Me.GroupBox4.Size = New System.Drawing.Size(356, 532)
+        Me.GroupBox4.Size = New System.Drawing.Size(356, 401)
         Me.GroupBox4.TabIndex = 42
         Me.GroupBox4.TabStop = False
         Me.GroupBox4.Text = "serial output"
@@ -420,11 +415,23 @@ Partial Class main
         Me.btn_tmpbutton.Text = "Button1"
         Me.btn_tmpbutton.UseVisualStyleBackColor = True
         '
+        'GroupBox5
+        '
+        Me.GroupBox5.Controls.Add(Me.tb_single_command)
+        Me.GroupBox5.Controls.Add(Me.btn_sendSingleCommand)
+        Me.GroupBox5.Location = New System.Drawing.Point(615, 435)
+        Me.GroupBox5.Name = "GroupBox5"
+        Me.GroupBox5.Size = New System.Drawing.Size(356, 73)
+        Me.GroupBox5.TabIndex = 44
+        Me.GroupBox5.TabStop = False
+        Me.GroupBox5.Text = "send single Command"
+        '
         'main
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(594, 572)
+        Me.ClientSize = New System.Drawing.Size(584, 522)
+        Me.Controls.Add(Me.GroupBox5)
         Me.Controls.Add(Me.btn_tmpbutton)
         Me.Controls.Add(Me.GroupBox4)
         Me.Controls.Add(Me.GroupBox3)
@@ -434,8 +441,6 @@ Partial Class main
         Me.Controls.Add(Me.btn_moveX100Y200)
         Me.Controls.Add(Me.btn_moveX10)
         Me.Controls.Add(Me.btn_G999)
-        Me.Controls.Add(Me.btn_sendSingleCommand)
-        Me.Controls.Add(Me.tb_single_command)
         Me.Controls.Add(Me.GroupBox1)
         Me.Controls.Add(Me.MenuStrip1)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog
@@ -456,6 +461,8 @@ Partial Class main
         Me.SplitContainer1.ResumeLayout(False)
         Me.GroupBox4.ResumeLayout(False)
         Me.GroupBox4.PerformLayout()
+        Me.GroupBox5.ResumeLayout(False)
+        Me.GroupBox5.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -498,8 +505,8 @@ Partial Class main
     Friend WithEvents GroupBox3 As System.Windows.Forms.GroupBox
     Friend WithEvents SplitContainer1 As System.Windows.Forms.SplitContainer
     Friend WithEvents ManualOperationsToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents SendSingleCommandToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents GroupBox4 As System.Windows.Forms.GroupBox
     Friend WithEvents btn_tmpbutton As System.Windows.Forms.Button
+    Friend WithEvents GroupBox5 As System.Windows.Forms.GroupBox
 
 End Class
