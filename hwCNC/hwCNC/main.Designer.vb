@@ -23,7 +23,6 @@ Partial Class main
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.btn_ConnectToSelectedPort = New System.Windows.Forms.Button()
-        Me.lb_serialOutput = New System.Windows.Forms.ListBox()
         Me.cb_COMPort = New System.Windows.Forms.ComboBox()
         Me.btn_RefreshCOMPort = New System.Windows.Forms.Button()
         Me.Label1 = New System.Windows.Forms.Label()
@@ -41,47 +40,60 @@ Partial Class main
         Me.btn_moveX10 = New System.Windows.Forms.Button()
         Me.btn_moveX100Y200 = New System.Windows.Forms.Button()
         Me.tb_GCodeProgramm = New System.Windows.Forms.TextBox()
-        Me.btn_tmpbutton = New System.Windows.Forms.Button()
         Me.btn_sendProgram = New System.Windows.Forms.Button()
-        Me.btn_loadProgram = New System.Windows.Forms.Button()
         Me.ofd_GCODE = New System.Windows.Forms.OpenFileDialog()
         Me.btn_MoreOrLess = New System.Windows.Forms.Button()
-        Me.btn_cleanGCode = New System.Windows.Forms.Button()
-        Me.ListBox1 = New System.Windows.Forms.ListBox()
         Me.TextBox1 = New System.Windows.Forms.TextBox()
-        Me.btn_OpenManOp = New System.Windows.Forms.Button()
-        Me.lbox_PrgCodeCleaned = New System.Windows.Forms.ListBox()
+        Me.MenuStrip1 = New System.Windows.Forms.MenuStrip()
+        Me.FileToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.LoadNCProgramToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.SavecleanedNCProgramToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.OptionsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ShowToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.LoadToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.SaveToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.QuitToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.HelpToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.LogToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.AboutToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.GroupBox2 = New System.Windows.Forms.GroupBox()
+        Me.GroupBox3 = New System.Windows.Forms.GroupBox()
+        Me.SplitContainer1 = New System.Windows.Forms.SplitContainer()
+        Me.ManualOperationsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.SendSingleCommandToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.GroupBox4 = New System.Windows.Forms.GroupBox()
+        Me.btn_tmpbutton = New System.Windows.Forms.Button()
         Me.GroupBox1.SuspendLayout()
+        Me.MenuStrip1.SuspendLayout()
+        Me.GroupBox2.SuspendLayout()
+        Me.GroupBox3.SuspendLayout()
+        CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.SplitContainer1.Panel1.SuspendLayout()
+        Me.SplitContainer1.Panel2.SuspendLayout()
+        Me.SplitContainer1.SuspendLayout()
+        Me.GroupBox4.SuspendLayout()
         Me.SuspendLayout()
         '
         'btn_ConnectToSelectedPort
         '
-        Me.btn_ConnectToSelectedPort.Location = New System.Drawing.Point(12, 67)
+        Me.btn_ConnectToSelectedPort.Location = New System.Drawing.Point(5, 85)
         Me.btn_ConnectToSelectedPort.Name = "btn_ConnectToSelectedPort"
         Me.btn_ConnectToSelectedPort.Size = New System.Drawing.Size(75, 23)
         Me.btn_ConnectToSelectedPort.TabIndex = 0
         Me.btn_ConnectToSelectedPort.Text = "connect"
         Me.btn_ConnectToSelectedPort.UseVisualStyleBackColor = True
         '
-        'lb_serialOutput
-        '
-        Me.lb_serialOutput.FormattingEnabled = True
-        Me.lb_serialOutput.Location = New System.Drawing.Point(597, 252)
-        Me.lb_serialOutput.Name = "lb_serialOutput"
-        Me.lb_serialOutput.Size = New System.Drawing.Size(366, 238)
-        Me.lb_serialOutput.TabIndex = 1
-        '
         'cb_COMPort
         '
         Me.cb_COMPort.FormattingEnabled = True
-        Me.cb_COMPort.Location = New System.Drawing.Point(13, 38)
+        Me.cb_COMPort.Location = New System.Drawing.Point(6, 56)
         Me.cb_COMPort.Name = "cb_COMPort"
         Me.cb_COMPort.Size = New System.Drawing.Size(75, 21)
         Me.cb_COMPort.TabIndex = 2
         '
         'btn_RefreshCOMPort
         '
-        Me.btn_RefreshCOMPort.Location = New System.Drawing.Point(13, 9)
+        Me.btn_RefreshCOMPort.Location = New System.Drawing.Point(6, 27)
         Me.btn_RefreshCOMPort.Name = "btn_RefreshCOMPort"
         Me.btn_RefreshCOMPort.Size = New System.Drawing.Size(75, 23)
         Me.btn_RefreshCOMPort.TabIndex = 3
@@ -103,7 +115,7 @@ Partial Class main
         Me.tb_ActPosX.Font = New System.Drawing.Font("Microsoft Sans Serif", 24.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.tb_ActPosX.Location = New System.Drawing.Point(61, 13)
         Me.tb_ActPosX.Name = "tb_ActPosX"
-        Me.tb_ActPosX.Size = New System.Drawing.Size(97, 44)
+        Me.tb_ActPosX.Size = New System.Drawing.Size(145, 44)
         Me.tb_ActPosX.TabIndex = 10
         '
         'tb_ActPosY
@@ -111,7 +123,7 @@ Partial Class main
         Me.tb_ActPosY.Font = New System.Drawing.Font("Microsoft Sans Serif", 24.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.tb_ActPosY.Location = New System.Drawing.Point(62, 68)
         Me.tb_ActPosY.Name = "tb_ActPosY"
-        Me.tb_ActPosY.Size = New System.Drawing.Size(96, 44)
+        Me.tb_ActPosY.Size = New System.Drawing.Size(144, 44)
         Me.tb_ActPosY.TabIndex = 12
         '
         'Label2
@@ -130,16 +142,16 @@ Partial Class main
         Me.GroupBox1.Controls.Add(Me.tb_ActPosX)
         Me.GroupBox1.Controls.Add(Me.Label1)
         Me.GroupBox1.Controls.Add(Me.Label2)
-        Me.GroupBox1.Location = New System.Drawing.Point(162, 12)
+        Me.GroupBox1.Location = New System.Drawing.Point(360, 27)
         Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Size = New System.Drawing.Size(173, 123)
+        Me.GroupBox1.Size = New System.Drawing.Size(212, 123)
         Me.GroupBox1.TabIndex = 13
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "Position"
         '
         'btn_DoHoming
         '
-        Me.btn_DoHoming.Location = New System.Drawing.Point(12, 180)
+        Me.btn_DoHoming.Location = New System.Drawing.Point(87, 81)
         Me.btn_DoHoming.Name = "btn_DoHoming"
         Me.btn_DoHoming.Size = New System.Drawing.Size(75, 56)
         Me.btn_DoHoming.TabIndex = 14
@@ -148,7 +160,7 @@ Partial Class main
         '
         'btn_CloseComPort
         '
-        Me.btn_CloseComPort.Location = New System.Drawing.Point(12, 96)
+        Me.btn_CloseComPort.Location = New System.Drawing.Point(5, 114)
         Me.btn_CloseComPort.Name = "btn_CloseComPort"
         Me.btn_CloseComPort.Size = New System.Drawing.Size(75, 23)
         Me.btn_CloseComPort.TabIndex = 16
@@ -157,7 +169,7 @@ Partial Class main
         '
         'btn_getMachineConfig
         '
-        Me.btn_getMachineConfig.Location = New System.Drawing.Point(12, 125)
+        Me.btn_getMachineConfig.Location = New System.Drawing.Point(87, 27)
         Me.btn_getMachineConfig.Name = "btn_getMachineConfig"
         Me.btn_getMachineConfig.Size = New System.Drawing.Size(75, 49)
         Me.btn_getMachineConfig.TabIndex = 17
@@ -166,14 +178,14 @@ Partial Class main
         '
         'tb_single_command
         '
-        Me.tb_single_command.Location = New System.Drawing.Point(12, 522)
+        Me.tb_single_command.Location = New System.Drawing.Point(12, 512)
         Me.tb_single_command.Name = "tb_single_command"
-        Me.tb_single_command.Size = New System.Drawing.Size(170, 20)
+        Me.tb_single_command.Size = New System.Drawing.Size(278, 20)
         Me.tb_single_command.TabIndex = 21
         '
         'btn_sendSingleCommand
         '
-        Me.btn_sendSingleCommand.Location = New System.Drawing.Point(188, 520)
+        Me.btn_sendSingleCommand.Location = New System.Drawing.Point(300, 512)
         Me.btn_sendSingleCommand.Name = "btn_sendSingleCommand"
         Me.btn_sendSingleCommand.Size = New System.Drawing.Size(72, 23)
         Me.btn_sendSingleCommand.TabIndex = 22
@@ -182,15 +194,15 @@ Partial Class main
         '
         'tb_serialOutput
         '
-        Me.tb_serialOutput.Location = New System.Drawing.Point(597, 11)
+        Me.tb_serialOutput.Location = New System.Drawing.Point(6, 12)
         Me.tb_serialOutput.Multiline = True
         Me.tb_serialOutput.Name = "tb_serialOutput"
-        Me.tb_serialOutput.Size = New System.Drawing.Size(366, 235)
+        Me.tb_serialOutput.Size = New System.Drawing.Size(344, 514)
         Me.tb_serialOutput.TabIndex = 23
         '
         'btn_G999
         '
-        Me.btn_G999.Location = New System.Drawing.Point(13, 357)
+        Me.btn_G999.Location = New System.Drawing.Point(210, 52)
         Me.btn_G999.Name = "btn_G999"
         Me.btn_G999.Size = New System.Drawing.Size(129, 23)
         Me.btn_G999.TabIndex = 25
@@ -199,7 +211,7 @@ Partial Class main
         '
         'btn_moveX10
         '
-        Me.btn_moveX10.Location = New System.Drawing.Point(13, 387)
+        Me.btn_moveX10.Location = New System.Drawing.Point(210, 82)
         Me.btn_moveX10.Name = "btn_moveX10"
         Me.btn_moveX10.Size = New System.Drawing.Size(129, 23)
         Me.btn_moveX10.TabIndex = 26
@@ -208,7 +220,7 @@ Partial Class main
         '
         'btn_moveX100Y200
         '
-        Me.btn_moveX100Y200.Location = New System.Drawing.Point(13, 416)
+        Me.btn_moveX100Y200.Location = New System.Drawing.Point(210, 111)
         Me.btn_moveX100Y200.Name = "btn_moveX100Y200"
         Me.btn_moveX100Y200.Size = New System.Drawing.Size(129, 23)
         Me.btn_moveX100Y200.TabIndex = 27
@@ -217,135 +229,238 @@ Partial Class main
         '
         'tb_GCodeProgramm
         '
-        Me.tb_GCodeProgramm.Location = New System.Drawing.Point(350, 12)
+        Me.tb_GCodeProgramm.Font = New System.Drawing.Font("Courier New", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.tb_GCodeProgramm.Location = New System.Drawing.Point(3, 0)
         Me.tb_GCodeProgramm.Multiline = True
         Me.tb_GCodeProgramm.Name = "tb_GCodeProgramm"
-        Me.tb_GCodeProgramm.Size = New System.Drawing.Size(225, 192)
+        Me.tb_GCodeProgramm.ScrollBars = System.Windows.Forms.ScrollBars.Both
+        Me.tb_GCodeProgramm.Size = New System.Drawing.Size(272, 271)
         Me.tb_GCodeProgramm.TabIndex = 28
         Me.tb_GCodeProgramm.Text = "G1 X1 Y1 F200;" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "G1 X2 Y2;" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "G1 X3 Y3;" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "G2 X4 Y4 I4 J4 F75;" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "G1 X5 Y5;" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "G3 X6 Y6 I6" & _
     " J6 F75;" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "G1 X7 Y7;" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "M30;"
         '
-        'btn_tmpbutton
-        '
-        Me.btn_tmpbutton.Location = New System.Drawing.Point(888, 504)
-        Me.btn_tmpbutton.Name = "btn_tmpbutton"
-        Me.btn_tmpbutton.Size = New System.Drawing.Size(75, 41)
-        Me.btn_tmpbutton.TabIndex = 29
-        Me.btn_tmpbutton.Text = "Button1"
-        Me.btn_tmpbutton.UseVisualStyleBackColor = True
-        '
         'btn_sendProgram
         '
-        Me.btn_sendProgram.Location = New System.Drawing.Point(490, 210)
+        Me.btn_sendProgram.Location = New System.Drawing.Point(489, 478)
         Me.btn_sendProgram.Name = "btn_sendProgram"
         Me.btn_sendProgram.Size = New System.Drawing.Size(83, 30)
         Me.btn_sendProgram.TabIndex = 30
         Me.btn_sendProgram.Text = "send program"
         Me.btn_sendProgram.UseVisualStyleBackColor = True
         '
-        'btn_loadProgram
-        '
-        Me.btn_loadProgram.Location = New System.Drawing.Point(348, 210)
-        Me.btn_loadProgram.Name = "btn_loadProgram"
-        Me.btn_loadProgram.Size = New System.Drawing.Size(77, 30)
-        Me.btn_loadProgram.TabIndex = 31
-        Me.btn_loadProgram.Text = "load program"
-        Me.btn_loadProgram.UseVisualStyleBackColor = True
-        '
         'btn_MoreOrLess
         '
-        Me.btn_MoreOrLess.Location = New System.Drawing.Point(500, 519)
+        Me.btn_MoreOrLess.Location = New System.Drawing.Point(497, 537)
         Me.btn_MoreOrLess.Name = "btn_MoreOrLess"
         Me.btn_MoreOrLess.Size = New System.Drawing.Size(75, 23)
         Me.btn_MoreOrLess.TabIndex = 33
         Me.btn_MoreOrLess.Text = "more >>>"
         Me.btn_MoreOrLess.UseVisualStyleBackColor = True
         '
-        'btn_cleanGCode
-        '
-        Me.btn_cleanGCode.Location = New System.Drawing.Point(428, 214)
-        Me.btn_cleanGCode.Name = "btn_cleanGCode"
-        Me.btn_cleanGCode.Size = New System.Drawing.Size(56, 23)
-        Me.btn_cleanGCode.TabIndex = 34
-        Me.btn_cleanGCode.Text = "clean"
-        Me.btn_cleanGCode.UseVisualStyleBackColor = True
-        '
-        'ListBox1
-        '
-        Me.ListBox1.FormattingEnabled = True
-        Me.ListBox1.Location = New System.Drawing.Point(13, 242)
-        Me.ListBox1.Name = "ListBox1"
-        Me.ListBox1.Size = New System.Drawing.Size(214, 108)
-        Me.ListBox1.TabIndex = 35
-        '
         'TextBox1
         '
-        Me.TextBox1.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.TextBox1.Location = New System.Drawing.Point(350, 247)
+        Me.TextBox1.Font = New System.Drawing.Font("Courier New", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.TextBox1.Location = New System.Drawing.Point(3, 0)
         Me.TextBox1.Multiline = True
         Me.TextBox1.Name = "TextBox1"
         Me.TextBox1.ScrollBars = System.Windows.Forms.ScrollBars.Both
-        Me.TextBox1.Size = New System.Drawing.Size(223, 223)
+        Me.TextBox1.Size = New System.Drawing.Size(266, 271)
         Me.TextBox1.TabIndex = 36
         '
-        'btn_OpenManOp
+        'MenuStrip1
         '
-        Me.btn_OpenManOp.Font = New System.Drawing.Font("Microsoft Sans Serif", 15.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btn_OpenManOp.Location = New System.Drawing.Point(380, 476)
-        Me.btn_OpenManOp.Name = "btn_OpenManOp"
-        Me.btn_OpenManOp.Size = New System.Drawing.Size(114, 66)
-        Me.btn_OpenManOp.TabIndex = 37
-        Me.btn_OpenManOp.Text = "manual operation"
-        Me.btn_OpenManOp.UseVisualStyleBackColor = True
+        Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.FileToolStripMenuItem, Me.HelpToolStripMenuItem, Me.ManualOperationsToolStripMenuItem, Me.SendSingleCommandToolStripMenuItem})
+        Me.MenuStrip1.Location = New System.Drawing.Point(0, 0)
+        Me.MenuStrip1.Name = "MenuStrip1"
+        Me.MenuStrip1.Size = New System.Drawing.Size(594, 24)
+        Me.MenuStrip1.TabIndex = 39
+        Me.MenuStrip1.Text = "MenuStrip1"
         '
-        'lbox_PrgCodeCleaned
+        'FileToolStripMenuItem
         '
-        Me.lbox_PrgCodeCleaned.FormattingEnabled = True
-        Me.lbox_PrgCodeCleaned.Location = New System.Drawing.Point(13, 599)
-        Me.lbox_PrgCodeCleaned.Name = "lbox_PrgCodeCleaned"
-        Me.lbox_PrgCodeCleaned.Size = New System.Drawing.Size(120, 17)
-        Me.lbox_PrgCodeCleaned.TabIndex = 38
+        Me.FileToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.LoadNCProgramToolStripMenuItem, Me.SavecleanedNCProgramToolStripMenuItem, Me.OptionsToolStripMenuItem, Me.QuitToolStripMenuItem})
+        Me.FileToolStripMenuItem.Name = "FileToolStripMenuItem"
+        Me.FileToolStripMenuItem.Size = New System.Drawing.Size(39, 20)
+        Me.FileToolStripMenuItem.Text = "File"
+        '
+        'LoadNCProgramToolStripMenuItem
+        '
+        Me.LoadNCProgramToolStripMenuItem.Name = "LoadNCProgramToolStripMenuItem"
+        Me.LoadNCProgramToolStripMenuItem.Size = New System.Drawing.Size(222, 22)
+        Me.LoadNCProgramToolStripMenuItem.Text = "load NC-Program"
+        '
+        'SavecleanedNCProgramToolStripMenuItem
+        '
+        Me.SavecleanedNCProgramToolStripMenuItem.Name = "SavecleanedNCProgramToolStripMenuItem"
+        Me.SavecleanedNCProgramToolStripMenuItem.Size = New System.Drawing.Size(222, 22)
+        Me.SavecleanedNCProgramToolStripMenuItem.Text = "save (cleaned) NC-Program"
+        '
+        'OptionsToolStripMenuItem
+        '
+        Me.OptionsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ShowToolStripMenuItem, Me.LoadToolStripMenuItem, Me.SaveToolStripMenuItem})
+        Me.OptionsToolStripMenuItem.Name = "OptionsToolStripMenuItem"
+        Me.OptionsToolStripMenuItem.Size = New System.Drawing.Size(222, 22)
+        Me.OptionsToolStripMenuItem.Text = "Options"
+        '
+        'ShowToolStripMenuItem
+        '
+        Me.ShowToolStripMenuItem.Name = "ShowToolStripMenuItem"
+        Me.ShowToolStripMenuItem.Size = New System.Drawing.Size(103, 22)
+        Me.ShowToolStripMenuItem.Text = "show"
+        '
+        'LoadToolStripMenuItem
+        '
+        Me.LoadToolStripMenuItem.Name = "LoadToolStripMenuItem"
+        Me.LoadToolStripMenuItem.Size = New System.Drawing.Size(103, 22)
+        Me.LoadToolStripMenuItem.Text = "load"
+        '
+        'SaveToolStripMenuItem
+        '
+        Me.SaveToolStripMenuItem.Name = "SaveToolStripMenuItem"
+        Me.SaveToolStripMenuItem.Size = New System.Drawing.Size(103, 22)
+        Me.SaveToolStripMenuItem.Text = "save"
+        '
+        'QuitToolStripMenuItem
+        '
+        Me.QuitToolStripMenuItem.Name = "QuitToolStripMenuItem"
+        Me.QuitToolStripMenuItem.Size = New System.Drawing.Size(222, 22)
+        Me.QuitToolStripMenuItem.Text = "Close"
+        '
+        'HelpToolStripMenuItem
+        '
+        Me.HelpToolStripMenuItem.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right
+        Me.HelpToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.LogToolStripMenuItem, Me.AboutToolStripMenuItem})
+        Me.HelpToolStripMenuItem.Name = "HelpToolStripMenuItem"
+        Me.HelpToolStripMenuItem.RightToLeft = System.Windows.Forms.RightToLeft.Yes
+        Me.HelpToolStripMenuItem.Size = New System.Drawing.Size(44, 20)
+        Me.HelpToolStripMenuItem.Text = "Help"
+        '
+        'LogToolStripMenuItem
+        '
+        Me.LogToolStripMenuItem.Name = "LogToolStripMenuItem"
+        Me.LogToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.LogToolStripMenuItem.Text = "Log"
+        '
+        'AboutToolStripMenuItem
+        '
+        Me.AboutToolStripMenuItem.Name = "AboutToolStripMenuItem"
+        Me.AboutToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.AboutToolStripMenuItem.Text = "About"
+        '
+        'GroupBox2
+        '
+        Me.GroupBox2.Controls.Add(Me.btn_RefreshCOMPort)
+        Me.GroupBox2.Controls.Add(Me.btn_ConnectToSelectedPort)
+        Me.GroupBox2.Controls.Add(Me.cb_COMPort)
+        Me.GroupBox2.Controls.Add(Me.btn_DoHoming)
+        Me.GroupBox2.Controls.Add(Me.btn_CloseComPort)
+        Me.GroupBox2.Controls.Add(Me.btn_getMachineConfig)
+        Me.GroupBox2.Location = New System.Drawing.Point(12, 27)
+        Me.GroupBox2.Name = "GroupBox2"
+        Me.GroupBox2.Size = New System.Drawing.Size(169, 149)
+        Me.GroupBox2.TabIndex = 40
+        Me.GroupBox2.TabStop = False
+        Me.GroupBox2.Text = "Control"
+        '
+        'GroupBox3
+        '
+        Me.GroupBox3.Controls.Add(Me.SplitContainer1)
+        Me.GroupBox3.Location = New System.Drawing.Point(12, 182)
+        Me.GroupBox3.Name = "GroupBox3"
+        Me.GroupBox3.Size = New System.Drawing.Size(560, 290)
+        Me.GroupBox3.TabIndex = 41
+        Me.GroupBox3.TabStop = False
+        Me.GroupBox3.Text = "NC-Program"
+        '
+        'SplitContainer1
+        '
+        Me.SplitContainer1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.SplitContainer1.Location = New System.Drawing.Point(3, 16)
+        Me.SplitContainer1.Name = "SplitContainer1"
+        '
+        'SplitContainer1.Panel1
+        '
+        Me.SplitContainer1.Panel1.Controls.Add(Me.tb_GCodeProgramm)
+        '
+        'SplitContainer1.Panel2
+        '
+        Me.SplitContainer1.Panel2.Controls.Add(Me.TextBox1)
+        Me.SplitContainer1.Size = New System.Drawing.Size(554, 271)
+        Me.SplitContainer1.SplitterDistance = 278
+        Me.SplitContainer1.TabIndex = 0
+        '
+        'ManualOperationsToolStripMenuItem
+        '
+        Me.ManualOperationsToolStripMenuItem.Name = "ManualOperationsToolStripMenuItem"
+        Me.ManualOperationsToolStripMenuItem.Size = New System.Drawing.Size(123, 20)
+        Me.ManualOperationsToolStripMenuItem.Text = "manual operations"
+        '
+        'SendSingleCommandToolStripMenuItem
+        '
+        Me.SendSingleCommandToolStripMenuItem.Name = "SendSingleCommandToolStripMenuItem"
+        Me.SendSingleCommandToolStripMenuItem.Size = New System.Drawing.Size(138, 20)
+        Me.SendSingleCommandToolStripMenuItem.Text = "send single command"
+        '
+        'GroupBox4
+        '
+        Me.GroupBox4.Controls.Add(Me.tb_serialOutput)
+        Me.GroupBox4.Location = New System.Drawing.Point(615, 28)
+        Me.GroupBox4.Name = "GroupBox4"
+        Me.GroupBox4.Size = New System.Drawing.Size(356, 532)
+        Me.GroupBox4.TabIndex = 42
+        Me.GroupBox4.TabStop = False
+        Me.GroupBox4.Text = "serial output"
+        '
+        'btn_tmpbutton
+        '
+        Me.btn_tmpbutton.Location = New System.Drawing.Point(390, 650)
+        Me.btn_tmpbutton.Name = "btn_tmpbutton"
+        Me.btn_tmpbutton.Size = New System.Drawing.Size(75, 23)
+        Me.btn_tmpbutton.TabIndex = 43
+        Me.btn_tmpbutton.Text = "Button1"
+        Me.btn_tmpbutton.UseVisualStyleBackColor = True
         '
         'main
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(584, 640)
-        Me.Controls.Add(Me.lbox_PrgCodeCleaned)
-        Me.Controls.Add(Me.btn_OpenManOp)
-        Me.Controls.Add(Me.TextBox1)
-        Me.Controls.Add(Me.ListBox1)
-        Me.Controls.Add(Me.btn_cleanGCode)
-        Me.Controls.Add(Me.btn_MoreOrLess)
-        Me.Controls.Add(Me.btn_loadProgram)
-        Me.Controls.Add(Me.btn_sendProgram)
+        Me.ClientSize = New System.Drawing.Size(594, 572)
         Me.Controls.Add(Me.btn_tmpbutton)
-        Me.Controls.Add(Me.tb_GCodeProgramm)
+        Me.Controls.Add(Me.GroupBox4)
+        Me.Controls.Add(Me.GroupBox3)
+        Me.Controls.Add(Me.GroupBox2)
+        Me.Controls.Add(Me.btn_MoreOrLess)
+        Me.Controls.Add(Me.btn_sendProgram)
         Me.Controls.Add(Me.btn_moveX100Y200)
         Me.Controls.Add(Me.btn_moveX10)
         Me.Controls.Add(Me.btn_G999)
-        Me.Controls.Add(Me.tb_serialOutput)
         Me.Controls.Add(Me.btn_sendSingleCommand)
         Me.Controls.Add(Me.tb_single_command)
-        Me.Controls.Add(Me.btn_getMachineConfig)
-        Me.Controls.Add(Me.btn_CloseComPort)
-        Me.Controls.Add(Me.btn_DoHoming)
         Me.Controls.Add(Me.GroupBox1)
-        Me.Controls.Add(Me.btn_RefreshCOMPort)
-        Me.Controls.Add(Me.cb_COMPort)
-        Me.Controls.Add(Me.lb_serialOutput)
-        Me.Controls.Add(Me.btn_ConnectToSelectedPort)
+        Me.Controls.Add(Me.MenuStrip1)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog
+        Me.MainMenuStrip = Me.MenuStrip1
         Me.Name = "main"
         Me.Text = "hwCNC"
         Me.GroupBox1.ResumeLayout(False)
         Me.GroupBox1.PerformLayout()
+        Me.MenuStrip1.ResumeLayout(False)
+        Me.MenuStrip1.PerformLayout()
+        Me.GroupBox2.ResumeLayout(False)
+        Me.GroupBox3.ResumeLayout(False)
+        Me.SplitContainer1.Panel1.ResumeLayout(False)
+        Me.SplitContainer1.Panel1.PerformLayout()
+        Me.SplitContainer1.Panel2.ResumeLayout(False)
+        Me.SplitContainer1.Panel2.PerformLayout()
+        CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.SplitContainer1.ResumeLayout(False)
+        Me.GroupBox4.ResumeLayout(False)
+        Me.GroupBox4.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
     End Sub
     Friend WithEvents btn_ConnectToSelectedPort As System.Windows.Forms.Button
-    Friend WithEvents lb_serialOutput As System.Windows.Forms.ListBox
     Friend WithEvents cb_COMPort As System.Windows.Forms.ComboBox
     Friend WithEvents btn_RefreshCOMPort As System.Windows.Forms.Button
     Friend WithEvents Label1 As System.Windows.Forms.Label
@@ -363,15 +478,28 @@ Partial Class main
     Friend WithEvents btn_moveX10 As System.Windows.Forms.Button
     Friend WithEvents btn_moveX100Y200 As System.Windows.Forms.Button
     Friend WithEvents tb_GCodeProgramm As System.Windows.Forms.TextBox
-    Friend WithEvents btn_tmpbutton As System.Windows.Forms.Button
     Friend WithEvents btn_sendProgram As System.Windows.Forms.Button
-    Friend WithEvents btn_loadProgram As System.Windows.Forms.Button
     Friend WithEvents ofd_GCODE As System.Windows.Forms.OpenFileDialog
     Friend WithEvents btn_MoreOrLess As System.Windows.Forms.Button
-    Friend WithEvents btn_cleanGCode As System.Windows.Forms.Button
-    Friend WithEvents ListBox1 As System.Windows.Forms.ListBox
     Friend WithEvents TextBox1 As System.Windows.Forms.TextBox
-    Friend WithEvents btn_OpenManOp As System.Windows.Forms.Button
-    Friend WithEvents lbox_PrgCodeCleaned As System.Windows.Forms.ListBox
+    Friend WithEvents MenuStrip1 As System.Windows.Forms.MenuStrip
+    Friend WithEvents FileToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents LoadNCProgramToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents SavecleanedNCProgramToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents QuitToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents HelpToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents LogToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents AboutToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents OptionsToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ShowToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents LoadToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents SaveToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents GroupBox2 As System.Windows.Forms.GroupBox
+    Friend WithEvents GroupBox3 As System.Windows.Forms.GroupBox
+    Friend WithEvents SplitContainer1 As System.Windows.Forms.SplitContainer
+    Friend WithEvents ManualOperationsToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents SendSingleCommandToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents GroupBox4 As System.Windows.Forms.GroupBox
+    Friend WithEvents btn_tmpbutton As System.Windows.Forms.Button
 
 End Class

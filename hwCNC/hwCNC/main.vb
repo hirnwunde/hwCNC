@@ -19,12 +19,12 @@ Public Class main
         refreshCOMPort()
         tb_ActPosX.Text = "UNDEF"
         tb_ActPosY.Text = "UNDEF"
-        tb_ActPosX.ReadOnly = True
-        tb_ActPosY.ReadOnly = True
-
+        
         btn_CloseComPort.Enabled = False
 
-        System.Globalization.CultureInfo.CreateSpecificCulture("en-US")
+        Thread.CurrentThread.CurrentCulture = Globalization.CultureInfo.CreateSpecificCulture("en-US")
+
+        btn_tmpbutton.Focus()
 
     End Sub
 
@@ -124,12 +124,11 @@ Public Class main
     End Sub
 
     Private Sub SetText(ByVal [text] As String)
-        If Me.lb_serialOutput.InvokeRequired Then
+        If Me.tb_serialOutput.InvokeRequired Then
             Dim d As New SetTextCallback(AddressOf SetText)
             Me.Invoke(d, New Object() {[text]})
         Else
             Me.tb_serialOutput.AppendText([text] + vbCrLf)
-            Me.lb_serialOutput.Items.Add([text])
             If singlecmd Then
                 tb_single_command.AppendText([text])
             End If
@@ -173,7 +172,8 @@ Public Class main
     End Sub
 
     Private Sub btn_getMachineConfig_Click(sender As System.Object, e As System.EventArgs) Handles btn_getMachineConfig.Click
-        SendCommand("V1;")
+        'SendCommand("V1;")
+        MsgBox("Not yet implemented")
     End Sub
 
 
@@ -243,26 +243,88 @@ Public Class main
         SendCommand("G1 X100 Y200 F500;")
     End Sub
 
-    'Private Sub tb_ActPosX_GotFocus(sender As Object, e As System.EventArgs) Handles tb_ActPosX.GotFocus
-    '    btn_tmpbutton.Focus()
-    'End Sub
-    'Private Sub tb_ActPosY_GotFocus(sender As Object, e As System.EventArgs) Handles tb_ActPosY.GotFocus
-    '    btn_tmpbutton.Focus()
-    'End Sub
+    Private Sub tb_ActPosX_GotFocus(sender As Object, e As System.EventArgs) Handles tb_ActPosX.GotFocus
+        btn_tmpbutton.Focus()
+    End Sub
+    Private Sub tb_ActPosY_GotFocus(sender As Object, e As System.EventArgs) Handles tb_ActPosY.GotFocus
+        btn_tmpbutton.Focus()
+    End Sub
+
 
     Private Sub btn_sendProgramm_Click(sender As System.Object, e As System.EventArgs) Handles btn_sendProgram.Click
         For Each line In tb_GCodeProgramm.Lines
 
             SendCommand(line)
-            'While Not cmdProcessed
-            'System.Threading.Thread.Sleep(100)
-            'End While
+            While Not cmdProcessed
+                System.Threading.Thread.Sleep(100)
+            End While
             cmdProcessed = False
 
         Next
     End Sub
 
-    Private Sub btn_loadProgram_Click(sender As System.Object, e As System.EventArgs) Handles btn_loadProgram.Click
+
+    Private Sub tb_single_command_KeyDown(sender As Object, e As System.Windows.Forms.KeyEventArgs) Handles tb_single_command.KeyDown
+        If e.KeyCode = Keys.Enter Then
+            SendCommand(tb_single_command.Text)
+
+            MsgBox("asd")
+
+        End If
+    End Sub
+
+    Private Sub btn_MoreOrLess_Click(sender As System.Object, e As System.EventArgs) Handles btn_MoreOrLess.Click
+
+        If folded Then
+            Me.Size = New Size(989, 600)
+            folded = False
+            btn_MoreOrLess.Text = "<<< less"
+        Else
+            Me.Size = New Size(600, 600)
+            folded = True
+            btn_MoreOrLess.Text = "more >>>"
+        End If
+
+    End Sub
+
+    Private Sub btn_cleanGCode_Click(sender As System.Object, e As System.EventArgs)
+        cleanGcode()
+    End Sub
+
+    
+    Private Sub btn_OpenManOp_Click(sender As System.Object, e As System.EventArgs)
+        ManOp.StartPosition = FormStartPosition.Manual
+
+        ManOp.Location = New Point(25, 200)
+
+        ManOp.Show()
+    End Sub
+
+    Private Sub Button1_Click(sender As System.Object, e As System.EventArgs)
+
+        ' {X=232,Y=323}
+        Dim loc, tmpposy As String
+        Dim posX, posY As Int16
+        Dim loc2() As String
+
+        loc = Me.Location.ToString
+        loc2 = loc.Split(",")
+
+        ' loc(0) = {X=232
+        ' loc(1) = Y=232}
+        posX = CInt(loc2(0).Remove(0, 3))
+        tmpposy = loc2(1).Remove(0, 2)
+        posY = CInt(tmpposy.Remove(tmpposy.Length - 1, 1))
+
+
+
+        MsgBox(posX.ToString + " - " + posY.ToString)
+
+
+    End Sub
+
+  
+    Private Sub loadNCProgram()
 
         Dim chooseFileRes As DialogResult
         ofd_GCODE.InitialDirectory = Environment.SpecialFolder.MyComputer
@@ -279,24 +341,10 @@ Public Class main
 
                 a = reader.ReadToEnd
                 tb_GCodeProgramm.AppendText(a + vbCrLf)
-                
+
                 reader.Close()
 
                 MsgBox("readed " + tb_GCodeProgramm.Lines.Count.ToString + " lines")
-
-                'Dim sr As System.IO.StreamReader = New System.IO.StreamReader(ofd_GCODE.FileName)
-                'Dim line As String
-
-                'For Each line In sr.ReadLine
-                '    tb_GCodeProgramm.AppendText(line)
-                'Next
-
-                'line = sr.ReadLine()
-
-                'While (line <> Nothing)
-                '    tb_GCodeProgramm.AppendText(line)
-                '    line = sr.ReadLine()
-                'End While
 
             Catch ex As Exception
                 MsgBox("error reading file:" + vbCrLf + ex.Message)
@@ -305,41 +353,11 @@ Public Class main
 
     End Sub
 
-    Private Sub tb_single_command_KeyDown(sender As Object, e As System.Windows.Forms.KeyEventArgs) Handles tb_single_command.KeyDown
-        If e.KeyCode = Keys.Enter Then
-            SendCommand(tb_single_command.Text)
-
-            MsgBox("asd")
-
-
-        End If
-    End Sub
-
-
-    Private Sub btn_MoreOrLess_Click(sender As System.Object, e As System.EventArgs) Handles btn_MoreOrLess.Click
-
-        If folded Then
-            Me.Size = New Size(989, 593)
-            folded = False
-            btn_MoreOrLess.Text = "<<< less"
-        Else
-            Me.Size = New Size(600, 593)
-            folded = True
-            btn_MoreOrLess.Text = "more >>>"
-        End If
-
-
-
-
-
-    End Sub
-
-    Private Sub btn_cleanGCode_Click(sender As System.Object, e As System.EventArgs) Handles btn_cleanGCode.Click
-
+    Private Sub cleanGcode()
         Dim GCMDSupported As Boolean = False
         Dim MCMDSupported As Boolean = False
         Dim linecnt As Int32 = 1
-
+        Dim writeline As Boolean = True
         Dim actline() As String
         Dim whichCMD As String
         Dim GorMCommand As String = "UNDEF"
@@ -349,12 +367,13 @@ Public Class main
         Dim thisX As String = ""
         Dim thisY As String = ""
         Dim thisF As String = ""
+        Dim UnsupportedCommand As Boolean = False
 
         TextBox1.Clear()
-        ListBox1.Items.Clear()
 
         For Each line As String In tb_GCodeProgramm.Lines
 
+            line = line.Replace(",", ".")
 
             actline = Split(line, " ") ' split lines by spaces
 
@@ -393,6 +412,13 @@ Public Class main
                     End If
                 End If
 
+                If ele.ToUpper.StartsWith("Z") Then
+                    Log.tb_logMessages.AppendText("Z-Axes in line " + linecnt.ToString + " not supported!" + vbCrLf)
+                    writeline = False
+                    UnsupportedCommand = True
+                    Exit For
+                End If
+
                 ' alle nachkommastellen nach der zweiten stelle abschneiden
                 If ele.ToUpper.StartsWith("X") Then
                     If ele.EndsWith(";") Then ele.Remove(ele.Length - 1)
@@ -404,6 +430,7 @@ Public Class main
 
                     End If
                 End If
+
                 If ele.ToUpper.StartsWith("Y") Then
 
                     thisY = ele.Remove(0, 1) ' cut "Y"
@@ -427,63 +454,55 @@ Public Class main
 
                     newline = newline + " " + ele
 
-
                 End If
 
                 If Not MCMDSupported And GorMCommand = "M" Then
-                    ListBox1.Items.Add("M-Command in line " + linecnt.ToString + " not supported!")
+                    Log.tb_logMessages.AppendText("M-Command in line " + linecnt.ToString + " not supported!" + vbCrLf)
+                    writeline = False
+                    UnsupportedCommand = True
                     Exit For
                 End If
 
                 If Not GCMDSupported And GorMCommand = "G" Then
-                    ListBox1.Items.Add("G-Command in line " + linecnt.ToString + " not supported!")
+                    Log.tb_logMessages.AppendText("G-Command in line " + linecnt.ToString + " not supported!" + vbCrLf)
+                    writeline = False
+                    UnsupportedCommand = True
                     Exit For
                 End If
 
-
             Next
 
-            If newline.Length <> 0 Then
-                lbox_PrgCodeCleaned.Items.Add(newline)
-                TextBox1.AppendText(newline + vbCrLf)
-
-            End If
+            If writeline And newline.Length <> 0 Then TextBox1.AppendText(newline + vbCrLf)
             linecnt = linecnt + 1
             newline = ""
+            writeline = True
         Next
 
+        Dim strMsg As String = "The NC-File contains unsupported commands." + vbCrLf _
+                             + "It is unsave to operate with this program!" + vbCrLf _
+                             + "Shall i display the logfile?"
+
+        Dim msgResult As MsgBoxResult
+        msgResult = MsgBox(strMsg, MsgBoxStyle.YesNo)
+        If msgResult = MsgBoxResult.Yes Then Log.Show()
+
+
     End Sub
 
-    
-    Private Sub btn_OpenManOp_Click(sender As System.Object, e As System.EventArgs) Handles btn_OpenManOp.Click
-        ManOp.StartPosition = FormStartPosition.Manual
+    Private Sub LoadNCProgramToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles LoadNCProgramToolStripMenuItem.Click
+        loadNCProgram()
+        cleanGcode()
+    End Sub
 
-        ManOp.Location = New Point(25, 200)
+    Private Sub LogToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles LogToolStripMenuItem.Click
+        Log.Show()
+    End Sub
 
+    Private Sub QuitToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles QuitToolStripMenuItem.Click
+        Me.Close()
+    End Sub
+
+    Private Sub ManualOperationsToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles ManualOperationsToolStripMenuItem.Click
         ManOp.Show()
     End Sub
-
-    Private Sub Button1_Click(sender As System.Object, e As System.EventArgs)
-
-        ' {X=232,Y=323}
-        Dim loc, tmpposy As String
-        Dim posX, posY As Int16
-        Dim loc2() As String
-
-        loc = Me.Location.ToString
-        loc2 = loc.Split(",")
-
-        ' loc(0) = {X=232
-        ' loc(1) = Y=232}
-        posX = CInt(loc2(0).Remove(0, 3))
-        tmpposy = loc2(1).Remove(0, 2)
-        posY = CInt(tmpposy.Remove(tmpposy.Length - 1, 1))
-
-
-
-        MsgBox(posX.ToString + " - " + posY.ToString)
-
-
-    End Sub
-
 End Class
