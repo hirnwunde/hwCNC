@@ -43,7 +43,7 @@ Partial Class main
         Me.btn_sendProgram = New System.Windows.Forms.Button()
         Me.ofd_GCODE = New System.Windows.Forms.OpenFileDialog()
         Me.btn_MoreOrLess = New System.Windows.Forms.Button()
-        Me.TextBox1 = New System.Windows.Forms.TextBox()
+        Me.tb_cleanedGCode = New System.Windows.Forms.TextBox()
         Me.MenuStrip1 = New System.Windows.Forms.MenuStrip()
         Me.FileToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.LoadNCProgramToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -60,9 +60,14 @@ Partial Class main
         Me.GroupBox2 = New System.Windows.Forms.GroupBox()
         Me.GroupBox3 = New System.Windows.Forms.GroupBox()
         Me.SplitContainer1 = New System.Windows.Forms.SplitContainer()
+        Me.Label3 = New System.Windows.Forms.Label()
+        Me.Label4 = New System.Windows.Forms.Label()
         Me.GroupBox4 = New System.Windows.Forms.GroupBox()
         Me.btn_tmpbutton = New System.Windows.Forms.Button()
         Me.GroupBox5 = New System.Windows.Forms.GroupBox()
+        Me.Button1 = New System.Windows.Forms.Button()
+        Me.btn_goX0Y0 = New System.Windows.Forms.Button()
+        Me.chkb_debug = New System.Windows.Forms.CheckBox()
         Me.GroupBox1.SuspendLayout()
         Me.MenuStrip1.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
@@ -195,54 +200,61 @@ Partial Class main
         '
         'tb_serialOutput
         '
-        Me.tb_serialOutput.Location = New System.Drawing.Point(6, 12)
+        Me.tb_serialOutput.Location = New System.Drawing.Point(6, 26)
         Me.tb_serialOutput.Multiline = True
         Me.tb_serialOutput.Name = "tb_serialOutput"
-        Me.tb_serialOutput.Size = New System.Drawing.Size(344, 384)
+        Me.tb_serialOutput.ScrollBars = System.Windows.Forms.ScrollBars.Both
+        Me.tb_serialOutput.Size = New System.Drawing.Size(344, 370)
         Me.tb_serialOutput.TabIndex = 23
         '
         'btn_G999
         '
+        Me.btn_G999.Enabled = False
         Me.btn_G999.Location = New System.Drawing.Point(210, 52)
         Me.btn_G999.Name = "btn_G999"
         Me.btn_G999.Size = New System.Drawing.Size(129, 23)
         Me.btn_G999.TabIndex = 25
         Me.btn_G999.Text = "G999;"
         Me.btn_G999.UseVisualStyleBackColor = True
+        Me.btn_G999.Visible = False
         '
         'btn_moveX10
         '
+        Me.btn_moveX10.Enabled = False
         Me.btn_moveX10.Location = New System.Drawing.Point(210, 82)
         Me.btn_moveX10.Name = "btn_moveX10"
         Me.btn_moveX10.Size = New System.Drawing.Size(129, 23)
         Me.btn_moveX10.TabIndex = 26
         Me.btn_moveX10.Text = "G1 X10 Y0 F500;"
         Me.btn_moveX10.UseVisualStyleBackColor = True
+        Me.btn_moveX10.Visible = False
         '
         'btn_moveX100Y200
         '
+        Me.btn_moveX100Y200.Enabled = False
         Me.btn_moveX100Y200.Location = New System.Drawing.Point(210, 111)
         Me.btn_moveX100Y200.Name = "btn_moveX100Y200"
         Me.btn_moveX100Y200.Size = New System.Drawing.Size(129, 23)
         Me.btn_moveX100Y200.TabIndex = 27
         Me.btn_moveX100Y200.Text = "G1 X100 Y200F300;"
         Me.btn_moveX100Y200.UseVisualStyleBackColor = True
+        Me.btn_moveX100Y200.Visible = False
         '
         'tb_GCodeProgramm
         '
         Me.tb_GCodeProgramm.Font = New System.Drawing.Font("Courier New", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.tb_GCodeProgramm.Location = New System.Drawing.Point(3, 0)
+        Me.tb_GCodeProgramm.Location = New System.Drawing.Point(3, 18)
         Me.tb_GCodeProgramm.Multiline = True
         Me.tb_GCodeProgramm.Name = "tb_GCodeProgramm"
         Me.tb_GCodeProgramm.ScrollBars = System.Windows.Forms.ScrollBars.Both
-        Me.tb_GCodeProgramm.Size = New System.Drawing.Size(272, 271)
+        Me.tb_GCodeProgramm.Size = New System.Drawing.Size(272, 253)
         Me.tb_GCodeProgramm.TabIndex = 28
-        Me.tb_GCodeProgramm.Text = "G1 X1 Y1 F200;" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "G1 X2 Y2;" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "G1 X3 Y3;" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "G2 X4 Y4 I4 J4 F75;" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "G1 X5 Y5;" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "G3 X6 Y6 I6" & _
-    " J6 F75;" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "G1 X7 Y7;" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "M30;"
+        Me.tb_GCodeProgramm.Text = "G1 X1 Y1 F200;" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "G1 X2 Y2;" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "(Mehrzeiliger" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Kommentar);" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "G1 X3 Y3;" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "G2 X4 Y4 I4 J4 " & _
+    "F75;" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "G1 X5 Y5;" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "(Einzeiliger Kommentar);" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "G3 X6 Y6 I6 J6 F75;" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "G1 X7 Y7;" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "M30;"
         '
         'btn_sendProgram
         '
-        Me.btn_sendProgram.Location = New System.Drawing.Point(18, 478)
+        Me.btn_sendProgram.Location = New System.Drawing.Point(300, 478)
         Me.btn_sendProgram.Name = "btn_sendProgram"
         Me.btn_sendProgram.Size = New System.Drawing.Size(83, 30)
         Me.btn_sendProgram.TabIndex = 30
@@ -258,22 +270,22 @@ Partial Class main
         Me.btn_MoreOrLess.Text = "more >>>"
         Me.btn_MoreOrLess.UseVisualStyleBackColor = True
         '
-        'TextBox1
+        'tb_cleanedGCode
         '
-        Me.TextBox1.Font = New System.Drawing.Font("Courier New", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.TextBox1.Location = New System.Drawing.Point(3, 0)
-        Me.TextBox1.Multiline = True
-        Me.TextBox1.Name = "TextBox1"
-        Me.TextBox1.ScrollBars = System.Windows.Forms.ScrollBars.Both
-        Me.TextBox1.Size = New System.Drawing.Size(266, 271)
-        Me.TextBox1.TabIndex = 36
+        Me.tb_cleanedGCode.Font = New System.Drawing.Font("Courier New", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.tb_cleanedGCode.Location = New System.Drawing.Point(3, 18)
+        Me.tb_cleanedGCode.Multiline = True
+        Me.tb_cleanedGCode.Name = "tb_cleanedGCode"
+        Me.tb_cleanedGCode.ScrollBars = System.Windows.Forms.ScrollBars.Both
+        Me.tb_cleanedGCode.Size = New System.Drawing.Size(266, 253)
+        Me.tb_cleanedGCode.TabIndex = 36
         '
         'MenuStrip1
         '
         Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.FileToolStripMenuItem, Me.HelpToolStripMenuItem, Me.ManualOperationsToolStripMenuItem})
         Me.MenuStrip1.Location = New System.Drawing.Point(0, 0)
         Me.MenuStrip1.Name = "MenuStrip1"
-        Me.MenuStrip1.Size = New System.Drawing.Size(584, 24)
+        Me.MenuStrip1.Size = New System.Drawing.Size(594, 24)
         Me.MenuStrip1.TabIndex = 39
         Me.MenuStrip1.Text = "MenuStrip1"
         '
@@ -281,50 +293,50 @@ Partial Class main
         '
         Me.FileToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.LoadNCProgramToolStripMenuItem, Me.SavecleanedNCProgramToolStripMenuItem, Me.OptionsToolStripMenuItem, Me.QuitToolStripMenuItem})
         Me.FileToolStripMenuItem.Name = "FileToolStripMenuItem"
-        Me.FileToolStripMenuItem.Size = New System.Drawing.Size(37, 20)
+        Me.FileToolStripMenuItem.Size = New System.Drawing.Size(39, 20)
         Me.FileToolStripMenuItem.Text = "File"
         '
         'LoadNCProgramToolStripMenuItem
         '
         Me.LoadNCProgramToolStripMenuItem.Name = "LoadNCProgramToolStripMenuItem"
-        Me.LoadNCProgramToolStripMenuItem.Size = New System.Drawing.Size(220, 22)
+        Me.LoadNCProgramToolStripMenuItem.Size = New System.Drawing.Size(222, 22)
         Me.LoadNCProgramToolStripMenuItem.Text = "load NC-Program"
         '
         'SavecleanedNCProgramToolStripMenuItem
         '
         Me.SavecleanedNCProgramToolStripMenuItem.Name = "SavecleanedNCProgramToolStripMenuItem"
-        Me.SavecleanedNCProgramToolStripMenuItem.Size = New System.Drawing.Size(220, 22)
+        Me.SavecleanedNCProgramToolStripMenuItem.Size = New System.Drawing.Size(222, 22)
         Me.SavecleanedNCProgramToolStripMenuItem.Text = "save (cleaned) NC-Program"
         '
         'OptionsToolStripMenuItem
         '
         Me.OptionsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ShowToolStripMenuItem, Me.LoadToolStripMenuItem, Me.SaveToolStripMenuItem})
         Me.OptionsToolStripMenuItem.Name = "OptionsToolStripMenuItem"
-        Me.OptionsToolStripMenuItem.Size = New System.Drawing.Size(220, 22)
+        Me.OptionsToolStripMenuItem.Size = New System.Drawing.Size(222, 22)
         Me.OptionsToolStripMenuItem.Text = "Options"
         '
         'ShowToolStripMenuItem
         '
         Me.ShowToolStripMenuItem.Name = "ShowToolStripMenuItem"
-        Me.ShowToolStripMenuItem.Size = New System.Drawing.Size(102, 22)
+        Me.ShowToolStripMenuItem.Size = New System.Drawing.Size(103, 22)
         Me.ShowToolStripMenuItem.Text = "show"
         '
         'LoadToolStripMenuItem
         '
         Me.LoadToolStripMenuItem.Name = "LoadToolStripMenuItem"
-        Me.LoadToolStripMenuItem.Size = New System.Drawing.Size(102, 22)
+        Me.LoadToolStripMenuItem.Size = New System.Drawing.Size(103, 22)
         Me.LoadToolStripMenuItem.Text = "load"
         '
         'SaveToolStripMenuItem
         '
         Me.SaveToolStripMenuItem.Name = "SaveToolStripMenuItem"
-        Me.SaveToolStripMenuItem.Size = New System.Drawing.Size(102, 22)
+        Me.SaveToolStripMenuItem.Size = New System.Drawing.Size(103, 22)
         Me.SaveToolStripMenuItem.Text = "save"
         '
         'QuitToolStripMenuItem
         '
         Me.QuitToolStripMenuItem.Name = "QuitToolStripMenuItem"
-        Me.QuitToolStripMenuItem.Size = New System.Drawing.Size(220, 22)
+        Me.QuitToolStripMenuItem.Size = New System.Drawing.Size(222, 22)
         Me.QuitToolStripMenuItem.Text = "Close"
         '
         'HelpToolStripMenuItem
@@ -339,19 +351,19 @@ Partial Class main
         'LogToolStripMenuItem
         '
         Me.LogToolStripMenuItem.Name = "LogToolStripMenuItem"
-        Me.LogToolStripMenuItem.Size = New System.Drawing.Size(107, 22)
+        Me.LogToolStripMenuItem.Size = New System.Drawing.Size(106, 22)
         Me.LogToolStripMenuItem.Text = "Log"
         '
         'AboutToolStripMenuItem
         '
         Me.AboutToolStripMenuItem.Name = "AboutToolStripMenuItem"
-        Me.AboutToolStripMenuItem.Size = New System.Drawing.Size(107, 22)
+        Me.AboutToolStripMenuItem.Size = New System.Drawing.Size(106, 22)
         Me.AboutToolStripMenuItem.Text = "About"
         '
         'ManualOperationsToolStripMenuItem
         '
         Me.ManualOperationsToolStripMenuItem.Name = "ManualOperationsToolStripMenuItem"
-        Me.ManualOperationsToolStripMenuItem.Size = New System.Drawing.Size(118, 20)
+        Me.ManualOperationsToolStripMenuItem.Size = New System.Drawing.Size(123, 20)
         Me.ManualOperationsToolStripMenuItem.Text = "manual operations"
         '
         'GroupBox2
@@ -387,17 +399,38 @@ Partial Class main
         '
         'SplitContainer1.Panel1
         '
+        Me.SplitContainer1.Panel1.Controls.Add(Me.Label3)
         Me.SplitContainer1.Panel1.Controls.Add(Me.tb_GCodeProgramm)
         '
         'SplitContainer1.Panel2
         '
-        Me.SplitContainer1.Panel2.Controls.Add(Me.TextBox1)
+        Me.SplitContainer1.Panel2.Controls.Add(Me.Label4)
+        Me.SplitContainer1.Panel2.Controls.Add(Me.tb_cleanedGCode)
         Me.SplitContainer1.Size = New System.Drawing.Size(554, 271)
         Me.SplitContainer1.SplitterDistance = 278
         Me.SplitContainer1.TabIndex = 0
         '
+        'Label3
+        '
+        Me.Label3.AutoSize = True
+        Me.Label3.Location = New System.Drawing.Point(3, 2)
+        Me.Label3.Name = "Label3"
+        Me.Label3.Size = New System.Drawing.Size(50, 13)
+        Me.Label3.TabIndex = 29
+        Me.Label3.Text = "imported:"
+        '
+        'Label4
+        '
+        Me.Label4.AutoSize = True
+        Me.Label4.Location = New System.Drawing.Point(4, 4)
+        Me.Label4.Name = "Label4"
+        Me.Label4.Size = New System.Drawing.Size(72, 13)
+        Me.Label4.TabIndex = 37
+        Me.Label4.Text = "to be sended:"
+        '
         'GroupBox4
         '
+        Me.GroupBox4.Controls.Add(Me.chkb_debug)
         Me.GroupBox4.Controls.Add(Me.tb_serialOutput)
         Me.GroupBox4.Location = New System.Drawing.Point(615, 28)
         Me.GroupBox4.Name = "GroupBox4"
@@ -426,11 +459,45 @@ Partial Class main
         Me.GroupBox5.TabStop = False
         Me.GroupBox5.Text = "send single Command"
         '
+        'Button1
+        '
+        Me.Button1.Enabled = False
+        Me.Button1.Location = New System.Drawing.Point(261, 13)
+        Me.Button1.Name = "Button1"
+        Me.Button1.Size = New System.Drawing.Size(75, 23)
+        Me.Button1.TabIndex = 45
+        Me.Button1.Text = "Button1"
+        Me.Button1.UseVisualStyleBackColor = True
+        Me.Button1.Visible = False
+        '
+        'btn_goX0Y0
+        '
+        Me.btn_goX0Y0.Enabled = False
+        Me.btn_goX0Y0.Location = New System.Drawing.Point(210, 141)
+        Me.btn_goX0Y0.Name = "btn_goX0Y0"
+        Me.btn_goX0Y0.Size = New System.Drawing.Size(126, 23)
+        Me.btn_goX0Y0.TabIndex = 46
+        Me.btn_goX0Y0.Text = "G1 X0 Y0 F800;"
+        Me.btn_goX0Y0.UseVisualStyleBackColor = True
+        Me.btn_goX0Y0.Visible = False
+        '
+        'chkb_debug
+        '
+        Me.chkb_debug.AutoSize = True
+        Me.chkb_debug.Location = New System.Drawing.Point(296, 9)
+        Me.chkb_debug.Name = "chkb_debug"
+        Me.chkb_debug.Size = New System.Drawing.Size(56, 17)
+        Me.chkb_debug.TabIndex = 24
+        Me.chkb_debug.Text = "debug"
+        Me.chkb_debug.UseVisualStyleBackColor = True
+        '
         'main
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(584, 522)
+        Me.ClientSize = New System.Drawing.Size(594, 522)
+        Me.Controls.Add(Me.btn_goX0Y0)
+        Me.Controls.Add(Me.Button1)
         Me.Controls.Add(Me.GroupBox5)
         Me.Controls.Add(Me.btn_tmpbutton)
         Me.Controls.Add(Me.GroupBox4)
@@ -488,7 +555,7 @@ Partial Class main
     Friend WithEvents btn_sendProgram As System.Windows.Forms.Button
     Friend WithEvents ofd_GCODE As System.Windows.Forms.OpenFileDialog
     Friend WithEvents btn_MoreOrLess As System.Windows.Forms.Button
-    Friend WithEvents TextBox1 As System.Windows.Forms.TextBox
+    Friend WithEvents tb_cleanedGCode As System.Windows.Forms.TextBox
     Friend WithEvents MenuStrip1 As System.Windows.Forms.MenuStrip
     Friend WithEvents FileToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents LoadNCProgramToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
@@ -508,5 +575,10 @@ Partial Class main
     Friend WithEvents GroupBox4 As System.Windows.Forms.GroupBox
     Friend WithEvents btn_tmpbutton As System.Windows.Forms.Button
     Friend WithEvents GroupBox5 As System.Windows.Forms.GroupBox
+    Friend WithEvents Button1 As System.Windows.Forms.Button
+    Friend WithEvents Label3 As System.Windows.Forms.Label
+    Friend WithEvents Label4 As System.Windows.Forms.Label
+    Friend WithEvents btn_goX0Y0 As System.Windows.Forms.Button
+    Friend WithEvents chkb_debug As System.Windows.Forms.CheckBox
 
 End Class
