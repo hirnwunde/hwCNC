@@ -285,7 +285,7 @@ Partial Class main
         Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.FileToolStripMenuItem, Me.HelpToolStripMenuItem, Me.ManualOperationsToolStripMenuItem})
         Me.MenuStrip1.Location = New System.Drawing.Point(0, 0)
         Me.MenuStrip1.Name = "MenuStrip1"
-        Me.MenuStrip1.Size = New System.Drawing.Size(594, 24)
+        Me.MenuStrip1.Size = New System.Drawing.Size(584, 24)
         Me.MenuStrip1.TabIndex = 39
         Me.MenuStrip1.Text = "MenuStrip1"
         '
@@ -495,7 +495,7 @@ Partial Class main
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(594, 522)
+        Me.ClientSize = New System.Drawing.Size(584, 522)
         Me.Controls.Add(Me.btn_goX0Y0)
         Me.Controls.Add(Me.Button1)
         Me.Controls.Add(Me.GroupBox5)

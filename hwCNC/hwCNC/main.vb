@@ -396,7 +396,7 @@ Public Class main
 
                 reader.Close()
 
-                MsgBox("readed " + tb_GCodeProgramm.Lines.Count.ToString + " lines")
+                MsgBox("readed " + tb_GCodeProgramm.Lines.Length.ToString + " lines")
 
             Catch ex As Exception
                 MsgBox("error reading file:" + vbCrLf + ex.Message)
