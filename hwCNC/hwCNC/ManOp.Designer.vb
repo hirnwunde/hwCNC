@@ -31,7 +31,6 @@ Partial Class ManOp
         Me.btn_moveXplus = New System.Windows.Forms.Button()
         Me.btn_moveXminus = New System.Windows.Forms.Button()
         Me.btn_moveYplus = New System.Windows.Forms.Button()
-        Me.Label1 = New System.Windows.Forms.Label()
         Me.btn_close = New System.Windows.Forms.Button()
         Me.GroupBox2.SuspendLayout()
         Me.SuspendLayout()
@@ -133,16 +132,6 @@ Partial Class ManOp
         Me.btn_moveYplus.Text = "Y + 1"
         Me.btn_moveYplus.UseVisualStyleBackColor = True
         '
-        'Label1
-        '
-        Me.Label1.AutoSize = True
-        Me.Label1.Font = New System.Drawing.Font("Monospac821 BT", 26.25!, CType((System.Drawing.FontStyle.Bold Or System.Drawing.FontStyle.Italic), System.Drawing.FontStyle), System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label1.Location = New System.Drawing.Point(5, 129)
-        Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(228, 42)
-        Me.Label1.TabIndex = 34
-        Me.Label1.Text = "unfinished"
-        '
         'btn_close
         '
         Me.btn_close.Location = New System.Drawing.Point(232, 139)
@@ -156,10 +145,9 @@ Partial Class ManOp
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(322, 174)
+        Me.ClientSize = New System.Drawing.Size(318, 170)
         Me.ControlBox = False
         Me.Controls.Add(Me.btn_close)
-        Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.GroupBox2)
         Me.MaximumSize = New System.Drawing.Size(334, 208)
         Me.MinimizeBox = False
@@ -169,7 +157,6 @@ Partial Class ManOp
         Me.Text = "ManOp"
         Me.GroupBox2.ResumeLayout(False)
         Me.ResumeLayout(False)
-        Me.PerformLayout()
 
     End Sub
     Friend WithEvents GroupBox2 As System.Windows.Forms.GroupBox
@@ -181,6 +168,5 @@ Partial Class ManOp
     Friend WithEvents btn_moveXplus As System.Windows.Forms.Button
     Friend WithEvents btn_moveXminus As System.Windows.Forms.Button
     Friend WithEvents btn_moveYplus As System.Windows.Forms.Button
-    Friend WithEvents Label1 As System.Windows.Forms.Label
     Friend WithEvents btn_close As System.Windows.Forms.Button
 End Class

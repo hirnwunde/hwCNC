@@ -22,6 +22,7 @@ Partial Class main
     'Das Bearbeiten mit dem Code-Editor ist nicht möglich.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
+        Me.components = New System.ComponentModel.Container()
         Me.btn_ConnectToSelectedPort = New System.Windows.Forms.Button()
         Me.cb_COMPort = New System.Windows.Forms.ComboBox()
         Me.btn_RefreshCOMPort = New System.Windows.Forms.Button()
@@ -48,14 +49,9 @@ Partial Class main
         Me.FileToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.LoadNCProgramToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.SavecleanedNCProgramToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.OptionsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ShowToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.LoadToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.SaveToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.QuitToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.HelpToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.LogToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.AboutToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ManualOperationsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.GroupBox2 = New System.Windows.Forms.GroupBox()
         Me.GroupBox3 = New System.Windows.Forms.GroupBox()
@@ -63,11 +59,14 @@ Partial Class main
         Me.Label3 = New System.Windows.Forms.Label()
         Me.Label4 = New System.Windows.Forms.Label()
         Me.GroupBox4 = New System.Windows.Forms.GroupBox()
+        Me.chkb_debug = New System.Windows.Forms.CheckBox()
         Me.btn_tmpbutton = New System.Windows.Forms.Button()
         Me.GroupBox5 = New System.Windows.Forms.GroupBox()
         Me.Button1 = New System.Windows.Forms.Button()
         Me.btn_goX0Y0 = New System.Windows.Forms.Button()
-        Me.chkb_debug = New System.Windows.Forms.CheckBox()
+        Me.SFD_NCFile = New System.Windows.Forms.SaveFileDialog()
+        Me.Button2 = New System.Windows.Forms.Button()
+        Me.TimerRuntime = New System.Windows.Forms.Timer(Me.components)
         Me.GroupBox1.SuspendLayout()
         Me.MenuStrip1.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
@@ -291,58 +290,33 @@ Partial Class main
         '
         'FileToolStripMenuItem
         '
-        Me.FileToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.LoadNCProgramToolStripMenuItem, Me.SavecleanedNCProgramToolStripMenuItem, Me.OptionsToolStripMenuItem, Me.QuitToolStripMenuItem})
+        Me.FileToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.LoadNCProgramToolStripMenuItem, Me.SavecleanedNCProgramToolStripMenuItem, Me.QuitToolStripMenuItem})
         Me.FileToolStripMenuItem.Name = "FileToolStripMenuItem"
-        Me.FileToolStripMenuItem.Size = New System.Drawing.Size(39, 20)
+        Me.FileToolStripMenuItem.Size = New System.Drawing.Size(37, 20)
         Me.FileToolStripMenuItem.Text = "File"
         '
         'LoadNCProgramToolStripMenuItem
         '
         Me.LoadNCProgramToolStripMenuItem.Name = "LoadNCProgramToolStripMenuItem"
-        Me.LoadNCProgramToolStripMenuItem.Size = New System.Drawing.Size(222, 22)
+        Me.LoadNCProgramToolStripMenuItem.Size = New System.Drawing.Size(220, 22)
         Me.LoadNCProgramToolStripMenuItem.Text = "load NC-Program"
         '
         'SavecleanedNCProgramToolStripMenuItem
         '
         Me.SavecleanedNCProgramToolStripMenuItem.Name = "SavecleanedNCProgramToolStripMenuItem"
-        Me.SavecleanedNCProgramToolStripMenuItem.Size = New System.Drawing.Size(222, 22)
+        Me.SavecleanedNCProgramToolStripMenuItem.Size = New System.Drawing.Size(220, 22)
         Me.SavecleanedNCProgramToolStripMenuItem.Text = "save (cleaned) NC-Program"
-        '
-        'OptionsToolStripMenuItem
-        '
-        Me.OptionsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ShowToolStripMenuItem, Me.LoadToolStripMenuItem, Me.SaveToolStripMenuItem})
-        Me.OptionsToolStripMenuItem.Name = "OptionsToolStripMenuItem"
-        Me.OptionsToolStripMenuItem.Size = New System.Drawing.Size(222, 22)
-        Me.OptionsToolStripMenuItem.Text = "Options"
-        '
-        'ShowToolStripMenuItem
-        '
-        Me.ShowToolStripMenuItem.Name = "ShowToolStripMenuItem"
-        Me.ShowToolStripMenuItem.Size = New System.Drawing.Size(103, 22)
-        Me.ShowToolStripMenuItem.Text = "show"
-        '
-        'LoadToolStripMenuItem
-        '
-        Me.LoadToolStripMenuItem.Name = "LoadToolStripMenuItem"
-        Me.LoadToolStripMenuItem.Size = New System.Drawing.Size(103, 22)
-        Me.LoadToolStripMenuItem.Text = "load"
-        '
-        'SaveToolStripMenuItem
-        '
-        Me.SaveToolStripMenuItem.Name = "SaveToolStripMenuItem"
-        Me.SaveToolStripMenuItem.Size = New System.Drawing.Size(103, 22)
-        Me.SaveToolStripMenuItem.Text = "save"
         '
         'QuitToolStripMenuItem
         '
         Me.QuitToolStripMenuItem.Name = "QuitToolStripMenuItem"
-        Me.QuitToolStripMenuItem.Size = New System.Drawing.Size(222, 22)
+        Me.QuitToolStripMenuItem.Size = New System.Drawing.Size(220, 22)
         Me.QuitToolStripMenuItem.Text = "Close"
         '
         'HelpToolStripMenuItem
         '
         Me.HelpToolStripMenuItem.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right
-        Me.HelpToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.LogToolStripMenuItem, Me.AboutToolStripMenuItem})
+        Me.HelpToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.LogToolStripMenuItem})
         Me.HelpToolStripMenuItem.Name = "HelpToolStripMenuItem"
         Me.HelpToolStripMenuItem.RightToLeft = System.Windows.Forms.RightToLeft.Yes
         Me.HelpToolStripMenuItem.Size = New System.Drawing.Size(44, 20)
@@ -351,19 +325,13 @@ Partial Class main
         'LogToolStripMenuItem
         '
         Me.LogToolStripMenuItem.Name = "LogToolStripMenuItem"
-        Me.LogToolStripMenuItem.Size = New System.Drawing.Size(106, 22)
+        Me.LogToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
         Me.LogToolStripMenuItem.Text = "Log"
-        '
-        'AboutToolStripMenuItem
-        '
-        Me.AboutToolStripMenuItem.Name = "AboutToolStripMenuItem"
-        Me.AboutToolStripMenuItem.Size = New System.Drawing.Size(106, 22)
-        Me.AboutToolStripMenuItem.Text = "About"
         '
         'ManualOperationsToolStripMenuItem
         '
         Me.ManualOperationsToolStripMenuItem.Name = "ManualOperationsToolStripMenuItem"
-        Me.ManualOperationsToolStripMenuItem.Size = New System.Drawing.Size(123, 20)
+        Me.ManualOperationsToolStripMenuItem.Size = New System.Drawing.Size(118, 20)
         Me.ManualOperationsToolStripMenuItem.Text = "manual operations"
         '
         'GroupBox2
@@ -439,6 +407,16 @@ Partial Class main
         Me.GroupBox4.TabStop = False
         Me.GroupBox4.Text = "serial output"
         '
+        'chkb_debug
+        '
+        Me.chkb_debug.AutoSize = True
+        Me.chkb_debug.Location = New System.Drawing.Point(296, 9)
+        Me.chkb_debug.Name = "chkb_debug"
+        Me.chkb_debug.Size = New System.Drawing.Size(56, 17)
+        Me.chkb_debug.TabIndex = 24
+        Me.chkb_debug.Text = "debug"
+        Me.chkb_debug.UseVisualStyleBackColor = True
+        '
         'btn_tmpbutton
         '
         Me.btn_tmpbutton.Location = New System.Drawing.Point(390, 650)
@@ -461,14 +439,12 @@ Partial Class main
         '
         'Button1
         '
-        Me.Button1.Enabled = False
         Me.Button1.Location = New System.Drawing.Point(261, 13)
         Me.Button1.Name = "Button1"
         Me.Button1.Size = New System.Drawing.Size(75, 23)
         Me.Button1.TabIndex = 45
         Me.Button1.Text = "Button1"
         Me.Button1.UseVisualStyleBackColor = True
-        Me.Button1.Visible = False
         '
         'btn_goX0Y0
         '
@@ -481,21 +457,25 @@ Partial Class main
         Me.btn_goX0Y0.UseVisualStyleBackColor = True
         Me.btn_goX0Y0.Visible = False
         '
-        'chkb_debug
+        'Button2
         '
-        Me.chkb_debug.AutoSize = True
-        Me.chkb_debug.Location = New System.Drawing.Point(296, 9)
-        Me.chkb_debug.Name = "chkb_debug"
-        Me.chkb_debug.Size = New System.Drawing.Size(56, 17)
-        Me.chkb_debug.TabIndex = 24
-        Me.chkb_debug.Text = "debug"
-        Me.chkb_debug.UseVisualStyleBackColor = True
+        Me.Button2.Location = New System.Drawing.Point(188, 12)
+        Me.Button2.Name = "Button2"
+        Me.Button2.Size = New System.Drawing.Size(37, 23)
+        Me.Button2.TabIndex = 47
+        Me.Button2.Text = "Button2"
+        Me.Button2.UseVisualStyleBackColor = True
+        '
+        'TimerRuntime
+        '
+        Me.TimerRuntime.Interval = 500
         '
         'main
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(594, 522)
+        Me.Controls.Add(Me.Button2)
         Me.Controls.Add(Me.btn_goX0Y0)
         Me.Controls.Add(Me.Button1)
         Me.Controls.Add(Me.GroupBox5)
@@ -563,11 +543,6 @@ Partial Class main
     Friend WithEvents QuitToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents HelpToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents LogToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents AboutToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents OptionsToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents ShowToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents LoadToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents SaveToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents GroupBox2 As System.Windows.Forms.GroupBox
     Friend WithEvents GroupBox3 As System.Windows.Forms.GroupBox
     Friend WithEvents SplitContainer1 As System.Windows.Forms.SplitContainer
@@ -580,5 +555,8 @@ Partial Class main
     Friend WithEvents Label4 As System.Windows.Forms.Label
     Friend WithEvents btn_goX0Y0 As System.Windows.Forms.Button
     Friend WithEvents chkb_debug As System.Windows.Forms.CheckBox
+    Friend WithEvents SFD_NCFile As System.Windows.Forms.SaveFileDialog
+    Friend WithEvents Button2 As System.Windows.Forms.Button
+    Friend WithEvents TimerRuntime As System.Windows.Forms.Timer
 
 End Class

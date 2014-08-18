@@ -587,4 +587,54 @@ Public Class main
     Private Sub btn_goX0Y0_Click(sender As System.Object, e As System.EventArgs) Handles btn_goX0Y0.Click
         SendCommand("G1 X0 Y0 F800;")
     End Sub
+
+    Private Sub SavecleanedNCProgramToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles SavecleanedNCProgramToolStripMenuItem.Click
+
+        SFD_NCFile.DefaultExt = "nc"
+        SFD_NCFile.Filter = "Numeric Control Files (*.nc)|*.nc"
+
+        If SFD_NCFile.ShowDialog = Windows.Forms.DialogResult.OK Then
+            Try
+                My.Computer.FileSystem.WriteAllText(SFD_NCFile.FileName, tb_cleanedGCode.Text, True)
+                MsgBox("File" + vbCrLf + SFD_NCFile.FileName + vbCrLf + "saved.")
+            Catch ex As Exception
+                MsgBox("Error while saveing file " + SFD_NCFile.FileName + ":" + vbCrLf + ex.Message)
+            End Try
+
+        End If
+
+    End Sub
+
+    Private Sub Button2_Click(sender As System.Object, e As System.EventArgs) Handles Button2.Click
+        Dim startend As New List(Of String)
+        Dim newstart As Integer = 0
+        Dim actpos As Integer = 0
+
+        Dim timerstart As New timer
+
+        lines.Clear()
+
+        For Each line In tb_cleanedGCode.Lines
+            If line <> "" Then lines.Add(line)
+        Next
+
+        For Each ele In lines
+            tb_cleanedGCode.SelectionStart = newstart
+            tb_cleanedGCode.SelectionLength = ele.Length
+            tb_cleanedGCode.Select()
+            tb_cleanedGCode.ScrollToCaret()
+            actpos = newstart + ele.Length
+            newstart = actpos + 2
+            System.Threading.Thread.Sleep(850)
+        Next
+
+        TimerRuntime.Stop()
+
+        tb_cleanedGCode.SelectionStart = 0
+        tb_cleanedGCode.SelectionLength = 0
+        tb_cleanedGCode.Select()
+
+        MsgBox("Runtime: " + timerstart.getTime)
+
+    End Sub
 End Class
