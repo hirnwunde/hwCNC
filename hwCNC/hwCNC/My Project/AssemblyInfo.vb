@@ -9,8 +9,8 @@ Imports System.Runtime.InteropServices
 ' Die Werte der Assemblyattribute überprüfen
 
 <Assembly: AssemblyTitle("hwCNC")> 
-<Assembly: AssemblyDescription("Control software for GCodeAFMotorV2-based firmware")> 
-<Assembly: AssemblyCompany("hwd-soft")> 
+<Assembly: AssemblyDescription("")> 
+<Assembly: AssemblyCompany("")> 
 <Assembly: AssemblyProduct("hwCNC")> 
 <Assembly: AssemblyCopyright("Copyright ©  2014")> 
 <Assembly: AssemblyTrademark("")> 
@@ -31,5 +31,5 @@ Imports System.Runtime.InteropServices
 ' übernehmen, indem Sie "*" eingeben:
 ' <Assembly: AssemblyVersion("1.0.*")> 
 
-<Assembly: AssemblyVersion("0.9.0.0")> 
-<Assembly: AssemblyFileVersion("0.9.0.0")> 
+<Assembly: AssemblyVersion("1.0.0.0")> 
+<Assembly: AssemblyFileVersion("1.0.0.0")> 
