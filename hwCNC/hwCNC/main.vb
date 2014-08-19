@@ -7,10 +7,17 @@ Public Class main
     Dim COMPortClosing As Boolean = False
     Dim folded As Boolean = True
     Dim lines As New List(Of String)
-    Dim CurrentRow As Integer = 0
+    Dim CurrentRow As UInt32 = 0
 
-    Public maxYPos As Double = 20.0
-    Public maxXPos As Double = 20.0
+    Public TimeStart As DateTime
+    Public TimeEnd As DateTime
+
+    Public maxYPos As Single = 1.0
+    Public maxXPos As Single = 1.0
+
+    Public FWVersion As String
+    Public StepsPerUnit As UInt16
+    Public MaxFeed, MinFeed As UInt16
 
     Dim WithEvents CNCComPort As New System.IO.Ports.SerialPort
     Delegate Sub SetTextCallback([text] As String)
@@ -39,11 +46,22 @@ Public Class main
 
     End Sub
 
+    ''' <summary>
+    ''' looking for available comports
+    ''' </summary>
+    ''' <remarks></remarks>
     Private Sub refreshCOMPort()
         cb_COMPort.Items.Clear()
+
         For Each comport As String In System.IO.Ports.SerialPort.GetPortNames
             cb_COMPort.Items.Add(comport)
         Next
+
+        If cb_COMPort.Items.Count = 0 Then
+            MsgBox("No COMPort available.")
+            cb_COMPort.Items.Add("No port found")
+        End If
+
         If cb_COMPort.Items.Count = 1 Then cb_COMPort.SelectedIndex = 0
     End Sub
 
@@ -52,6 +70,11 @@ Public Class main
         refreshCOMPort()
     End Sub
 
+    ''' <summary>
+    ''' connect to selected comport.
+    ''' after established connection sleep some time and get machine config
+    ''' </summary>
+    ''' <remarks></remarks>
     Private Sub btn_ConnectToSelectedPort_Click(sender As System.Object, e As System.EventArgs) Handles btn_ConnectToSelectedPort.Click
         If cb_COMPort.Items.Count > 0 Then
             Try
@@ -75,16 +98,80 @@ Public Class main
                 btn_sendSingleCommand.Enabled = True
                 ManualOperationsToolStripMenuItem.Enabled = True
 
+
+                ' wait for Arduino to initialize ...
+                ' on my system for the Uno 3sec are adequate
+                ' i know the Leonardo need longer to initialze ... but I don't had tested out how long
+                System.Threading.Thread.Sleep(3000)
+                ' get config from GCodeAFMotorV2-Firmware
+                SendCommand("V1;")
+
             Catch ex As Exception
-                MsgBox(ex.Message)
+                MsgBox("Error while connecting to Serial-Port: " + vbCrLf + ex.Message)
             End Try
         Else
             MsgBox("No COM-Port available.")
         End If
 
     End Sub
+
     Private Sub CNCComPort_ErrorReceived(sender As Object, e As System.IO.Ports.SerialErrorReceivedEventArgs) Handles CNCComPort.ErrorReceived
         If Not COMPortClosing Then MsgBox(e.ToString)
+    End Sub
+
+    ''' <summary>
+    ''' process raw machineconfig string and sets some software limits
+    ''' </summary>
+    ''' <param name="strCFG">Raw machineconfig string</param>
+    ''' <remarks></remarks>
+    Private Sub ReadConfig(ByVal strCFG As String)
+        Dim configs() As String
+        Dim version As String
+        Dim maxfeed, minfeed, DimX, DimY, StepsPerUnit As Int32
+        Dim tmp_str(2) As String
+        'strCFG = V:3-rc1;MAXFEED:500;MINFEED:1;DimX:400;DimY:600;SpU:4
+
+        configs = strCFG.Split(";")
+
+        tmp_str = configs(0).Split(":")
+        version = tmp_str(1)
+
+        tmp_str = configs(1).Split(":")
+        maxfeed = tmp_str(1)
+
+        tmp_str = configs(2).Split(":")
+        minfeed = tmp_str(1)
+
+        tmp_str = configs(3).Split(":")
+        DimX = tmp_str(1)
+
+        tmp_str = configs(4).Split(":")
+        DimY = tmp_str(1)
+
+        tmp_str = configs(5).Split(":")
+        StepsPerUnit = tmp_str(1)
+
+
+
+        MsgBox(version + vbCrLf + maxfeed.ToString + vbCrLf + minfeed.ToString + vbCrLf + DimX.ToString + vbCrLf + DimY.ToString + vbCrLf + StepsPerUnit.ToString)
+
+
+    End Sub
+
+    Private Sub RefreshPositions(ByVal strPos As String)
+        Dim tmparr1(), tmparr2() As String
+        Dim actxpos, actypos, posstring As String
+
+        'POS_TRK-X0.50,Y0.00
+        If chkb_debug.Checked Then Me.SetText(strPos)
+        tmparr1 = strPos.Split("-")
+        tmparr2 = tmparr1(1).Split(",")
+        actxpos = tmparr2(0)
+        actypos = tmparr2(1)
+
+        posstring = actxpos.ToString.Remove(0, 1) + ";" + actypos.ToString.Remove(0, 1)
+        SetTextPos(posstring)
+
     End Sub
 
     ''' <summary>
@@ -93,24 +180,25 @@ Public Class main
     ''' If string starts with "POS_TRK-" it is a new position and we have to update tb_ActPosX.Text and tb_ActPosY.Text
     ''' If string starts with "LNMVEND" the last G0/G1-Command is fully processed and we have to send the next command
     ''' If string starts with ">" nothing will be displayed (Exit Sub)
-    ''' All other will be written to tb_serialOutput and/or lb_serialOutput
+    ''' All other will be written to tb_serialOutput
     ''' </summary>
-    ''' <param name="sender"></param>
-    ''' <param name="e"></param>
-    ''' <remarks></remarks>
     Private Sub CNCComPort_DataReceived(sender As System.Object, e As System.IO.Ports.SerialDataReceivedEventArgs) Handles CNCComPort.DataReceived
-        
+        Dim tmparr1(), tmparr2() As String
+        Dim actxpos, actypos, posstring As String
+
         If Not COMPortClosing Then
 
-            Dim tmparr1(), tmparr2() As String
-            Dim actxpos, actypos, posstring As String
             Dim act_output As String
 
             Try
                 If CNCComPort.IsOpen Then
                     act_output = CNCComPort.ReadLine()
 
+                    If act_output.StartsWith("V:") Then ReadConfig(act_output)
+
                     If act_output.StartsWith("POS_TRK-") Then
+                        
+
                         'POS_TRK-X0.50,Y0.00
                         If chkb_debug.Checked Then Me.SetText(act_output)
                         tmparr1 = act_output.Split("-")
@@ -120,20 +208,18 @@ Public Class main
 
                         posstring = actxpos.ToString.Remove(0, 1) + ";" + actypos.ToString.Remove(0, 1)
                         SetTextPos(posstring)
+                    End If
+                    'RefreshPositions(act_output)
 
-                        'MsgBox("poschange:" + act_output)
-                    ElseIf act_output.StartsWith("LNMVEND") Then
+                    If act_output.StartsWith("LNMVEND") Then
 
                         If chkb_debug.Checked Then Me.SetText(act_output)
 
                         If singlecmd Then
                             singlecmd = False
                         Else
-                            SendNextLine()
+                            'SendNextLine()
                         End If
-
-                        'cmdProcessed = True
-                        'MsgBox("Fertig ...")
 
                     ElseIf act_output.StartsWith(">") Then
                         If chkb_debug.Checked Then Me.SetText(act_output)
@@ -144,7 +230,7 @@ Public Class main
                 End If
 
             Catch ex As Exception
-                MsgBox(ex.Message)
+                MsgBox("Error while recieving data: " + vbCrLf + ex.Message)
             End Try
         End If
 
@@ -173,16 +259,24 @@ Public Class main
             Me.tb_ActPosX.Text = posarr(0)
             Me.tb_ActPosY.Text = posarr(1)
 
-
         End If
     End Sub
 
+    Private Sub SetTextDebug(ByVal [text] As String)
+        If Me.tb_ActPosX.InvokeRequired Or Me.tb_ActPosY.InvokeRequired Then
+            Dim d As New SettextCallbackPos(AddressOf SetTextDebug)
+            Me.Invoke(d, New Object() {[text]})
+        Else
+
+            Me.TextBox1.AppendText([text])
+        End If
+    End Sub
 
     Private Sub btn_CloseComPort_Click(sender As System.Object, e As System.EventArgs) Handles btn_CloseComPort.Click
         COMPortClosing = True
 
         If CNCComPort.IsOpen Then
-           
+
             Try
                 CNCComPort.Close()
                 btn_ConnectToSelectedPort.Enabled = True
@@ -203,16 +297,12 @@ Public Class main
     End Sub
 
     Private Sub btn_getMachineConfig_Click(sender As System.Object, e As System.EventArgs) Handles btn_getMachineConfig.Click
-        'SendCommand("V1;")
-        MsgBox("Not yet implemented")
+        SendCommand("V1;")
     End Sub
-
 
     Private Sub btn_sendSingleCommand_Click(sender As System.Object, e As System.EventArgs) Handles btn_sendSingleCommand.Click
         singlecmd = True
         SendCommand(tb_single_command.Text)
-        System.Threading.Thread.Sleep(500)
-        singlecmd = False
     End Sub
 
     ''' <summary>
@@ -229,7 +319,7 @@ Public Class main
             Try
                 CNCComPort.Write(command)
             Catch ex As Exception
-                MsgBox(ex.Message)
+                MsgBox("Error while sending single command: " + vbCrLf + ex.Message)
             End Try
         End If
 
@@ -241,30 +331,6 @@ Public Class main
         tb_ActPosY.Text = "0.00"
     End Sub
 
-    Private Sub btn_moveXplus_Click(sender As System.Object, e As System.EventArgs)
-
-        SendCommand("V121;")
-
-    End Sub
-
-    Private Sub btn_moveXminus_Click(sender As System.Object, e As System.EventArgs)
-
-        SendCommand("V122;")
-
-    End Sub
-
-    Private Sub btn_moveYminus_Click(sender As System.Object, e As System.EventArgs)
-
-        SendCommand("V123;")
-
-    End Sub
-
-    Private Sub btn_moveYplus_Click(sender As System.Object, e As System.EventArgs)
-
-        SendCommand("V124;")
-
-    End Sub
-
     Private Sub btn_G999_Click(sender As System.Object, e As System.EventArgs) Handles btn_G999.Click
         SendCommand("G999;")
         tb_ActPosX.Text = "0.00"
@@ -274,7 +340,6 @@ Public Class main
     Private Sub btn_moveX10_Click(sender As System.Object, e As System.EventArgs) Handles btn_moveX10.Click
         SendCommand("G1 X10 Y0 F500;")
     End Sub
-
     Private Sub btn_moveX100Y200_Click(sender As System.Object, e As System.EventArgs) Handles btn_moveX100Y200.Click
         SendCommand("G1 X100 Y200 F500;")
     End Sub
@@ -286,29 +351,43 @@ Public Class main
         btn_tmpbutton.Focus()
     End Sub
 
-
     Private Sub btn_sendProgramm_Click(sender As System.Object, e As System.EventArgs) Handles btn_sendProgram.Click
-
-        ' fillGCodeArray
-        ' 
+        CurrentRow = 1
+        lines.Clear()
 
         For Each line In tb_cleanedGCode.Lines
             If line <> "" Then lines.Add(line)
         Next
 
-        SendNextLine()
+        TimeStart = Now
+        'SendNextLine()
+
+        For Each cmd In lines
+            SendCommand(cmd)
+        Next
+
+        TimeEnd = Now
+        Dim RunTime As TimeSpan
+        RunTime = TimeEnd - TimeStart
+        SetTextDebug("Process time: " + RunTime.Hours.ToString + "h " + RunTime.Minutes.ToString + "m " + RunTime.Seconds.ToString + "s." + vbCrLf)
 
     End Sub
 
     Private Sub SendNextLine()
-
         Try
-
-            If CurrentRow < lines.Count Then
+            If CurrentRow < lines.Count - 1 Then
                 SendCommand(lines(CurrentRow))
                 CurrentRow = CurrentRow + 1
             End If
-
+            If CurrentRow = lines.Count - 1 Then
+                ' last line
+                SendCommand(lines(CurrentRow))
+                TimeEnd = Now
+                Dim RunTime As TimeSpan
+                RunTime = TimeEnd - TimeStart
+                SetTextDebug("Process time: " + RunTime.Hours.ToString + "h " + RunTime.Minutes.ToString + "m " + RunTime.Seconds.ToString + "s." + vbCrLf)
+                Exit Sub
+            End If
         Catch ex As Exception
             MsgBox("Error while sending:" + vbCrLf + vbCrLf + ex.Message)
         End Try
@@ -317,16 +396,10 @@ Public Class main
 
 
     Private Sub tb_single_command_KeyDown(sender As Object, e As System.Windows.Forms.KeyEventArgs) Handles tb_single_command.KeyDown
-        If e.KeyCode = Keys.Enter Then
-            SendCommand(tb_single_command.Text)
-
-            MsgBox("asd")
-
-        End If
+        If e.KeyCode = Keys.Enter Then SendCommand(tb_single_command.Text)
     End Sub
 
     Private Sub btn_MoreOrLess_Click(sender As System.Object, e As System.EventArgs) Handles btn_MoreOrLess.Click
-
         If folded Then
             Me.Size = New Size(989, 550)
             folded = False
@@ -336,7 +409,6 @@ Public Class main
             folded = True
             btn_MoreOrLess.Text = "more >>>"
         End If
-
     End Sub
 
     Private Sub btn_cleanGCode_Click(sender As System.Object, e As System.EventArgs)
@@ -345,36 +417,8 @@ Public Class main
 
 
     Private Sub btn_OpenManOp_Click(sender As System.Object, e As System.EventArgs)
-        ManOp.StartPosition = FormStartPosition.Manual
-
-        ManOp.Location = New Point(25, 200)
-
         ManOp.Show()
     End Sub
-
-    Private Sub Button1_Click(sender As System.Object, e As System.EventArgs)
-
-        ' {X=232,Y=323}
-        Dim loc, tmpposy As String
-        Dim posX, posY As Int16
-        Dim loc2() As String
-
-        loc = Me.Location.ToString
-        loc2 = loc.Split(",")
-
-        ' loc(0) = {X=232
-        ' loc(1) = Y=232}
-        posX = CInt(loc2(0).Remove(0, 3))
-        tmpposy = loc2(1).Remove(0, 2)
-        posY = CInt(tmpposy.Remove(tmpposy.Length - 1, 1))
-
-
-
-        MsgBox(posX.ToString + " - " + posY.ToString)
-
-
-    End Sub
-
 
     Private Sub loadNCProgram()
 
@@ -413,32 +457,17 @@ Public Class main
         Dim actline() As String
         Dim whichCMD As String
         Dim GorMCommand As String = "UNDEF"
-        Dim dblVal As Double
-        Dim MoreThanTwo As Double
+        Dim dblVal As Single
+        Dim MoreThanTwo As Single
         Dim newline As String = ""
         Dim thisX As String = ""
         Dim thisY As String = ""
         Dim thisF As String = ""
         Dim UnsupportedCommand As Boolean = False
-        Dim processComment As Boolean = False
 
         tb_cleanedGCode.Clear()
 
         For Each line As String In tb_GCodeProgramm.Lines
-
-            'If line.StartsWith("(") Then
-            '    processComment = True
-            '    tb_cleanedGCode.AppendText(line + vbCrLf)
-            'End If
-
-            'If processComment Then
-            '    If Not line.Contains("(") Then
-            '        tb_cleanedGCode.AppendText(line + vbCrLf)
-            '        If line.Contains(")") Then processComment = False
-            '    End If
-            'End If
-
-
 
             line = line.Replace(",", ".")
 
@@ -489,8 +518,8 @@ Public Class main
                 ' alle nachkommastellen nach der zweiten stelle abschneiden
                 If ele.ToUpper.StartsWith("X") Then
                     If ele.EndsWith(";") Then ele.Remove(ele.Length - 1)
-                    MoreThanTwo = CDbl(ele.Remove(0, 1))
-                    If Double.TryParse(MoreThanTwo, dblVal) Then
+                    MoreThanTwo = CSng(ele.Remove(0, 1))
+                    If Single.TryParse(MoreThanTwo, dblVal) Then
 
                         thisX = Format(MoreThanTwo, "0.00")
                         newline = newline + " X" + thisX
@@ -507,8 +536,8 @@ Public Class main
                         thisY = thisY.Remove(thisY.Length - 1, 1) ' cut ";"
                     End If
 
-                    MoreThanTwo = CDbl(thisY)
-                    If Double.TryParse(MoreThanTwo, dblVal) Then
+                    MoreThanTwo = CSng(thisY)
+                    If Single.TryParse(MoreThanTwo, dblVal) Then
 
                         thisY = Format(MoreThanTwo, "0.00")
                         newline = newline + " Y" + thisY
@@ -563,9 +592,7 @@ Public Class main
     Private Sub LoadNCProgramToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles LoadNCProgramToolStripMenuItem.Click
         loadNCProgram()
         cleanGcode()
-
         If CNCComPort.IsOpen Then btn_sendProgram.Enabled = True
-
     End Sub
 
     Private Sub LogToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles LogToolStripMenuItem.Click
@@ -605,36 +632,36 @@ Public Class main
 
     End Sub
 
-    Private Sub Button2_Click(sender As System.Object, e As System.EventArgs) Handles Button2.Click
-        Dim startend As New List(Of String)
-        Dim newstart As Integer = 0
-        Dim actpos As Integer = 0
+    'Private Sub Button2_Click(sender As System.Object, e As System.EventArgs) Handles Button2.Click
+    '    Dim startend As New List(Of String)
+    '    Dim newstart As Integer = 0
+    '    Dim actpos As Integer = 0
 
-        Dim timerstart As New timer
+    '    Dim timerstart As New timer
 
-        lines.Clear()
+    '    lines.Clear()
 
-        For Each line In tb_cleanedGCode.Lines
-            If line <> "" Then lines.Add(line)
-        Next
+    '    For Each line In tb_cleanedGCode.Lines
+    '        If line <> "" Then lines.Add(line)
+    '    Next
 
-        For Each ele In lines
-            tb_cleanedGCode.SelectionStart = newstart
-            tb_cleanedGCode.SelectionLength = ele.Length
-            tb_cleanedGCode.Select()
-            tb_cleanedGCode.ScrollToCaret()
-            actpos = newstart + ele.Length
-            newstart = actpos + 2
-            System.Threading.Thread.Sleep(850)
-        Next
+    '    For Each ele In lines
+    '        tb_cleanedGCode.SelectionStart = newstart
+    '        tb_cleanedGCode.SelectionLength = ele.Length
+    '        tb_cleanedGCode.Select()
+    '        tb_cleanedGCode.ScrollToCaret()
+    '        actpos = newstart + ele.Length
+    '        newstart = actpos + 2
+    '        System.Threading.Thread.Sleep(850)
+    '    Next
 
-        TimerRuntime.Stop()
+    '    TimerRuntime.Stop()
 
-        tb_cleanedGCode.SelectionStart = 0
-        tb_cleanedGCode.SelectionLength = 0
-        tb_cleanedGCode.Select()
+    '    tb_cleanedGCode.SelectionStart = 0
+    '    tb_cleanedGCode.SelectionLength = 0
+    '    tb_cleanedGCode.Select()
 
-        MsgBox("Runtime: " + timerstart.getTime)
+    '    MsgBox("Runtime: " + timerstart.getTime)
 
-    End Sub
+    'End Sub
 End Class
