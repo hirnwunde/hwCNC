@@ -5,6 +5,7 @@ Public Class main
     Dim singlecmd As Boolean = False
     Dim cmdProcessed As Boolean = False
     Dim COMPortClosing As Boolean = False
+    Dim NCPrgDone As Boolean = False
     Dim folded As Boolean = True
     Dim lines As New List(Of String)
     Dim CurrentRow As UInt32 = 0
@@ -153,26 +154,26 @@ Public Class main
 
 
 
-        MsgBox(version + vbCrLf + maxfeed.ToString + vbCrLf + minfeed.ToString + vbCrLf + DimX.ToString + vbCrLf + DimY.ToString + vbCrLf + StepsPerUnit.ToString)
+        'MsgBox(version + vbCrLf + maxfeed.ToString + vbCrLf + minfeed.ToString + vbCrLf + DimX.ToString + vbCrLf + DimY.ToString + vbCrLf + StepsPerUnit.ToString)
 
 
     End Sub
 
-    Private Sub RefreshPositions(ByVal strPos As String)
-        Dim tmparr1(), tmparr2() As String
-        Dim actxpos, actypos, posstring As String
+    'Private Sub RefreshPositions(ByVal strPos As String)
+    '    Dim tmparr1(), tmparr2() As String
+    '    Dim actxpos, actypos, posstring As String
 
-        'POS_TRK-X0.50,Y0.00
-        If chkb_debug.Checked Then Me.SetText(strPos)
-        tmparr1 = strPos.Split("-")
-        tmparr2 = tmparr1(1).Split(",")
-        actxpos = tmparr2(0)
-        actypos = tmparr2(1)
+    '    'POS_TRK-X0.50,Y0.00
+    '    If chkb_debug.Checked Then Me.SetText(strPos)
+    '    tmparr1 = strPos.Split("-")
+    '    tmparr2 = tmparr1(1).Split(",")
+    '    actxpos = tmparr2(0)
+    '    actypos = tmparr2(1)
 
-        posstring = actxpos.ToString.Remove(0, 1) + ";" + actypos.ToString.Remove(0, 1)
-        SetTextPos(posstring)
+    '    posstring = actxpos.ToString.Remove(0, 1) + ";" + actypos.ToString.Remove(0, 1)
+    '    SetTextPos(posstring)
 
-    End Sub
+    'End Sub
 
     ''' <summary>
     ''' When data is send from Arduino to PC: get it!
@@ -208,10 +209,8 @@ Public Class main
 
                         posstring = actxpos.ToString.Remove(0, 1) + ";" + actypos.ToString.Remove(0, 1)
                         SetTextPos(posstring)
-                    End If
-                    'RefreshPositions(act_output)
 
-                    If act_output.StartsWith("LNMVEND") Then
+                    ElseIf act_output.StartsWith("LNMVEND") Then
 
                         If chkb_debug.Checked Then Me.SetText(act_output)
 
@@ -360,18 +359,8 @@ Public Class main
         Next
 
         TimeStart = Now
-        'SendNextLine()
 
-        For Each cmd In lines
-
-            SendCommand(cmd)
-
-        Next
-
-        TimeEnd = Now
-        Dim RunTime As TimeSpan
-        RunTime = TimeEnd - TimeStart
-        SetTextDebug("Process time: " + RunTime.Hours.ToString + "h " + RunTime.Minutes.ToString + "m " + RunTime.Seconds.ToString + "s." + vbCrLf)
+        SendNextLine()
 
     End Sub
 
@@ -388,6 +377,7 @@ Public Class main
                 Dim RunTime As TimeSpan
                 RunTime = TimeEnd - TimeStart
                 SetTextDebug("Process time: " + RunTime.Hours.ToString + "h " + RunTime.Minutes.ToString + "m " + RunTime.Seconds.ToString + "s." + vbCrLf)
+                lines.Clear()
                 Exit Sub
             End If
         Catch ex As Exception
