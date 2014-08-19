@@ -363,7 +363,9 @@ Public Class main
         'SendNextLine()
 
         For Each cmd In lines
+
             SendCommand(cmd)
+
         Next
 
         TimeEnd = Now
