@@ -1,4 +1,18 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+﻿'* hwCNC - a program to control an GCodeAFMotorV2-Firmware based X/Y-Plotter
+'* 
+'* Copyright (C) 2014 Oliver Beck
+'* 
+'* This file is part of hwCNC.
+'* 
+'* hwCNC is free software: you can redistribute it and/or modify it under the terms of the
+'* GNU General Public License version 3 as published by the Free Software Foundation.
+'* 
+'* hwCNC is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+'* without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+'* 
+'* See the GNU General Public License for more details. You should have received a copy of the GNU
+'* General Public License along with hwCNC. If not, see <http://www.gnu.org/licenses/>.
+ <Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class ManOp
     Inherits System.Windows.Forms.Form
 
@@ -145,7 +159,7 @@ Partial Class ManOp
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(318, 170)
+        Me.ClientSize = New System.Drawing.Size(322, 174)
         Me.ControlBox = False
         Me.Controls.Add(Me.btn_close)
         Me.Controls.Add(Me.GroupBox2)
