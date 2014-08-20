@@ -1,14 +1,26 @@
-﻿Imports System.Threading
+﻿'* hwCNC - a program to control an GCodeAFMotorV2-Firmware based X/Y-Plotter
+'* 
+'* Copyright (C) 2014 Oliver Beck
+'* 
+'* This file is part of hwCNC.
+'* 
+'* hwCNC is free software: you can redistribute it and/or modify it under the terms of the
+'* GNU General Public License version 3 as published by the Free Software Foundation.
+'* 
+'* hwCNC is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+'* without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+'* 
+'* See the GNU General Public License for more details. You should have received a copy of the GNU
+'* General Public License along with hwCNC. If not, see <http://www.gnu.org/licenses/>.
+ 
 
 Public Class main
 
-    Dim singlecmd As Boolean = False
-    Dim cmdProcessed As Boolean = False
     Dim COMPortClosing As Boolean = False
-    Dim NCPrgDone As Boolean = False
     Dim folded As Boolean = True
     Dim lines As New List(Of String)
     Dim CurrentRow As UInt32 = 0
+    Dim LastLine As Boolean = False
 
     Public TimeStart As DateTime
     Public TimeEnd As DateTime
@@ -22,96 +34,95 @@ Public Class main
 
     Dim WithEvents CNCComPort As New System.IO.Ports.SerialPort
     Delegate Sub SetTextCallback([text] As String)
-    Delegate Sub SettextCallbackPos([text] As String)
+    Delegate Sub SetTextPosCallback([text] As String)
+    Delegate Sub SetTextDbgCallback([text] As String)
 
-
-    Private Sub main_FormClosing(sender As Object, e As System.Windows.Forms.FormClosingEventArgs) Handles Me.FormClosing
-        If CNCComPort.IsOpen Then CNCComPort.Close()
-    End Sub
-
-    Private Sub main_Load(sender As System.Object, e As System.EventArgs) Handles MyBase.Load
-        refreshCOMPort()
-        tb_ActPosX.Text = "UNDEF"
-        tb_ActPosY.Text = "UNDEF"
-        
-        btn_CloseComPort.Enabled = False
-        btn_getMachineConfig.Enabled = False
-        btn_DoHoming.Enabled = False
-        btn_sendProgram.Enabled = False
-        btn_sendSingleCommand.Enabled = False
-        ManualOperationsToolStripMenuItem.Enabled = False
-
-        Thread.CurrentThread.CurrentCulture = Globalization.CultureInfo.CreateSpecificCulture("en-US")
-
-        btn_tmpbutton.Focus()
-
-    End Sub
-
-    ''' <summary>
-    ''' looking for available comports
-    ''' </summary>
-    ''' <remarks></remarks>
-    Private Sub refreshCOMPort()
-        cb_COMPort.Items.Clear()
-
-        For Each comport As String In System.IO.Ports.SerialPort.GetPortNames
-            cb_COMPort.Items.Add(comport)
-        Next
-
-        If cb_COMPort.Items.Count = 0 Then
-            MsgBox("No COMPort available.")
-            cb_COMPort.Items.Add("No port found")
+    Private Sub SetText(ByVal [text] As String)
+        If Me.tb_serialOutput.InvokeRequired Then
+            Dim d As New SetTextCallback(AddressOf SetText)
+            Me.Invoke(d, New Object() {[text]})
+        Else
+            Me.tb_serialOutput.AppendText([text] + vbCrLf)
         End If
-
-        If cb_COMPort.Items.Count = 1 Then cb_COMPort.SelectedIndex = 0
     End Sub
 
+    Private Sub SetTextPos(ByVal [text] As String)
+        Dim posarr(2) As String
+        If Me.tb_ActPosX.InvokeRequired Or Me.tb_ActPosY.InvokeRequired Then
+            Dim d As New SetTextPosCallback(AddressOf SetTextPos)
+            Me.Invoke(d, New Object() {[text]})
+        Else
+            posarr = [text].Split(";")
 
-    Private Sub btn_RefreshCOMPort_Click(sender As System.Object, e As System.EventArgs) Handles btn_RefreshCOMPort.Click
-        refreshCOMPort()
+            Me.tb_ActPosX.Text = posarr(0)
+            Me.tb_ActPosY.Text = posarr(1)
+
+        End If
     End Sub
+
+    'Private Sub SetTextDbg(ByVal [text] As String)
+    '    Dim posarr(2) As String
+    '    If Me.TextBox1.InvokeRequired Then
+    '        Dim d As New SetTextDbgCallback(AddressOf SetTextDbg)
+    '        Me.Invoke(d, New Object() {[text]})
+    '    Else
+    '        Me.TextBox1.Text = [text]
+    '    End If
+    'End Sub
+
 
     ''' <summary>
-    ''' connect to selected comport.
-    ''' after established connection sleep some time and get machine config
+    ''' When data is send from Arduino to PC: get it!
+    ''' here we look, what is send and react on it individually.
+    ''' If string starts with "POS_TRK-" it is a new position and we have to update tb_ActPosX.Text and tb_ActPosY.Text
+    ''' If string starts with "LNMVEND" the last G0/G1-Command is fully processed and we have to send the next command
+    ''' If string starts with ">" nothing will be displayed (Exit Sub)
+    ''' All other will be written to tb_serialOutput
     ''' </summary>
-    ''' <remarks></remarks>
-    Private Sub btn_ConnectToSelectedPort_Click(sender As System.Object, e As System.EventArgs) Handles btn_ConnectToSelectedPort.Click
-        If cb_COMPort.Items.Count > 0 Then
+    Private Sub CNCComPort_DataReceived(sender As System.Object, e As System.IO.Ports.SerialDataReceivedEventArgs) Handles CNCComPort.DataReceived
+        Dim tmparr1(), tmparr2() As String
+        Dim actxpos, actypos, posstring As String
+
+        If Not COMPortClosing Then
+
+            Dim act_output As String = "UNDEF"
+
             Try
-                CNCComPort.PortName = cb_COMPort.Text
-                CNCComPort.BaudRate = 57600
-                CNCComPort.DataBits = 8
-                CNCComPort.RtsEnable = True
-                CNCComPort.DtrEnable = True
-                CNCComPort.Parity = System.IO.Ports.Parity.None
-                CNCComPort.StopBits = System.IO.Ports.StopBits.One
-                CNCComPort.ReadBufferSize = 64
-                'CNCComPort.ReadTimeout = 200
-                'CNCComPort.WriteTimeout = 200
+                If CNCComPort.IsOpen Then
+                    act_output = CNCComPort.ReadLine()
 
-                CNCComPort.Open()
-                btn_ConnectToSelectedPort.Enabled = False
-                btn_CloseComPort.Enabled = True
-                btn_getMachineConfig.Enabled = True
-                btn_DoHoming.Enabled = True
+                    If act_output.StartsWith("V:") Then ReadConfig(act_output)
 
-                btn_sendSingleCommand.Enabled = True
-                ManualOperationsToolStripMenuItem.Enabled = True
+                    If act_output.StartsWith("POS_TRK-") Then
 
 
-                ' wait for Arduino to initialize ...
-                ' on my system for the Uno 3sec are adequate
-                ' i know the Leonardo need longer to initialze ... but I don't had tested out how long
-                System.Threading.Thread.Sleep(3000)
-                ' get config from GCodeAFMotorV2-Firmware
-                SendCommand("V1;")
+                        'POS_TRK-X0.50,Y0.00
+                        If chkb_debug.Checked Then Me.SetText(act_output)
+                        tmparr1 = act_output.Split("-")
+                        tmparr2 = tmparr1(1).Split(",")
+                        actxpos = tmparr2(0)
+                        actypos = tmparr2(1)
+
+                        posstring = actxpos.ToString.Remove(0, 1) + ";" + actypos.ToString.Remove(0, 1)
+                        SetTextPos(posstring)
+
+                    ElseIf act_output.StartsWith("LNMVEND") Then
+
+                        If chkb_debug.Checked Then Me.SetText(act_output)
+
+                        SendNextLine()
+
+                    ElseIf act_output.StartsWith(">") Then
+                        If chkb_debug.Checked Then Me.SetText(act_output)
+                        Exit Sub
+                    Else
+                        Me.SetText(act_output)
+                    End If
+                End If
 
             Catch ex As Exception
-                MsgBox("Error while connecting to Serial-Port: " + vbCrLf + ex.Message)
+                MsgBox("Error while recieving data: " + vbCrLf + ex.Message + vbCrLf + vbCrLf + act_output)
             End Try
-        Else
-            MsgBox("No COM-Port available.")
         End If
 
     End Sub
@@ -119,6 +130,8 @@ Public Class main
     Private Sub CNCComPort_ErrorReceived(sender As Object, e As System.IO.Ports.SerialErrorReceivedEventArgs) Handles CNCComPort.ErrorReceived
         If Not COMPortClosing Then MsgBox(e.ToString)
     End Sub
+
+
 
     ''' <summary>
     ''' process raw machineconfig string and sets some software limits
@@ -159,149 +172,23 @@ Public Class main
 
     End Sub
 
-    'Private Sub RefreshPositions(ByVal strPos As String)
-    '    Dim tmparr1(), tmparr2() As String
-    '    Dim actxpos, actypos, posstring As String
-
-    '    'POS_TRK-X0.50,Y0.00
-    '    If chkb_debug.Checked Then Me.SetText(strPos)
-    '    tmparr1 = strPos.Split("-")
-    '    tmparr2 = tmparr1(1).Split(",")
-    '    actxpos = tmparr2(0)
-    '    actypos = tmparr2(1)
-
-    '    posstring = actxpos.ToString.Remove(0, 1) + ";" + actypos.ToString.Remove(0, 1)
-    '    SetTextPos(posstring)
-
-    'End Sub
-
     ''' <summary>
-    ''' When data is send from Arduino to PC: get it!
-    ''' here we look, what is send and react on it individually.
-    ''' If string starts with "POS_TRK-" it is a new position and we have to update tb_ActPosX.Text and tb_ActPosY.Text
-    ''' If string starts with "LNMVEND" the last G0/G1-Command is fully processed and we have to send the next command
-    ''' If string starts with ">" nothing will be displayed (Exit Sub)
-    ''' All other will be written to tb_serialOutput
+    ''' looking for available comports
     ''' </summary>
-    Private Sub CNCComPort_DataReceived(sender As System.Object, e As System.IO.Ports.SerialDataReceivedEventArgs) Handles CNCComPort.DataReceived
-        Dim tmparr1(), tmparr2() As String
-        Dim actxpos, actypos, posstring As String
+    ''' <remarks></remarks>
+    Private Sub refreshCOMPort()
+        cb_COMPort.Items.Clear()
 
-        If Not COMPortClosing Then
+        For Each comport As String In System.IO.Ports.SerialPort.GetPortNames
+            cb_COMPort.Items.Add(comport)
+        Next
 
-            Dim act_output As String
-
-            Try
-                If CNCComPort.IsOpen Then
-                    act_output = CNCComPort.ReadLine()
-
-                    If act_output.StartsWith("V:") Then ReadConfig(act_output)
-
-                    If act_output.StartsWith("POS_TRK-") Then
-                        
-
-                        'POS_TRK-X0.50,Y0.00
-                        If chkb_debug.Checked Then Me.SetText(act_output)
-                        tmparr1 = act_output.Split("-")
-                        tmparr2 = tmparr1(1).Split(",")
-                        actxpos = tmparr2(0)
-                        actypos = tmparr2(1)
-
-                        posstring = actxpos.ToString.Remove(0, 1) + ";" + actypos.ToString.Remove(0, 1)
-                        SetTextPos(posstring)
-
-                    ElseIf act_output.StartsWith("LNMVEND") Then
-
-                        If chkb_debug.Checked Then Me.SetText(act_output)
-
-                        If singlecmd Then
-                            singlecmd = False
-                        Else
-                            'SendNextLine()
-                        End If
-
-                    ElseIf act_output.StartsWith(">") Then
-                        If chkb_debug.Checked Then Me.SetText(act_output)
-                        Exit Sub
-                    Else
-                        Me.SetText(act_output)
-                    End If
-                End If
-
-            Catch ex As Exception
-                MsgBox("Error while recieving data: " + vbCrLf + ex.Message)
-            End Try
+        If cb_COMPort.Items.Count = 0 Then
+            MsgBox("No COMPort available.")
+            cb_COMPort.Items.Add("No port found")
         End If
 
-    End Sub
-
-    Private Sub SetText(ByVal [text] As String)
-        If Me.tb_serialOutput.InvokeRequired Then
-            Dim d As New SetTextCallback(AddressOf SetText)
-            Me.Invoke(d, New Object() {[text]})
-        Else
-            Me.tb_serialOutput.AppendText([text] + vbCrLf)
-            If singlecmd Then
-                tb_single_command.AppendText([text])
-            End If
-        End If
-    End Sub
-
-    Private Sub SetTextPos(ByVal [text] As String)
-        Dim posarr(2) As String
-        If Me.tb_ActPosX.InvokeRequired Or Me.tb_ActPosY.InvokeRequired Then
-            Dim d As New SettextCallbackPos(AddressOf SetTextPos)
-            Me.Invoke(d, New Object() {[text]})
-        Else
-            posarr = [text].Split(";")
-
-            Me.tb_ActPosX.Text = posarr(0)
-            Me.tb_ActPosY.Text = posarr(1)
-
-        End If
-    End Sub
-
-    Private Sub SetTextDebug(ByVal [text] As String)
-        If Me.tb_ActPosX.InvokeRequired Or Me.tb_ActPosY.InvokeRequired Then
-            Dim d As New SettextCallbackPos(AddressOf SetTextDebug)
-            Me.Invoke(d, New Object() {[text]})
-        Else
-
-            Me.TextBox1.AppendText([text])
-        End If
-    End Sub
-
-    Private Sub btn_CloseComPort_Click(sender As System.Object, e As System.EventArgs) Handles btn_CloseComPort.Click
-        COMPortClosing = True
-
-        If CNCComPort.IsOpen Then
-
-            Try
-                CNCComPort.Close()
-                btn_ConnectToSelectedPort.Enabled = True
-                btn_CloseComPort.Enabled = False
-                btn_CloseComPort.Enabled = False
-                btn_getMachineConfig.Enabled = False
-                btn_DoHoming.Enabled = False
-                btn_sendProgram.Enabled = False
-                btn_sendSingleCommand.Enabled = False
-                ManualOperationsToolStripMenuItem.Enabled = False
-                tb_ActPosX.Text = "UNDEF"
-                tb_ActPosY.Text = "UNDEF"
-            Catch ex As Exception
-                MsgBox(ex.Message)
-            End Try
-        End If
-        COMPortClosing = False
-    End Sub
-
-    Private Sub btn_getMachineConfig_Click(sender As System.Object, e As System.EventArgs) Handles btn_getMachineConfig.Click
-        SendCommand("V1;")
-    End Sub
-
-    Private Sub btn_sendSingleCommand_Click(sender As System.Object, e As System.EventArgs) Handles btn_sendSingleCommand.Click
-        singlecmd = True
-        SendCommand(tb_single_command.Text)
+        If cb_COMPort.Items.Count = 1 Then cb_COMPort.SelectedIndex = 0
     End Sub
 
     ''' <summary>
@@ -324,60 +211,18 @@ Public Class main
 
     End Sub
 
-    Private Sub btn_DoHoming_Click(sender As System.Object, e As System.EventArgs) Handles btn_DoHoming.Click
-        SendCommand("G999")
-        tb_ActPosX.Text = "0.00"
-        tb_ActPosY.Text = "0.00"
-    End Sub
-
-    Private Sub btn_G999_Click(sender As System.Object, e As System.EventArgs) Handles btn_G999.Click
-        SendCommand("G999;")
-        tb_ActPosX.Text = "0.00"
-        tb_ActPosY.Text = "0.00"
-    End Sub
-
-    Private Sub btn_moveX10_Click(sender As System.Object, e As System.EventArgs) Handles btn_moveX10.Click
-        SendCommand("G1 X10 Y0 F500;")
-    End Sub
-    Private Sub btn_moveX100Y200_Click(sender As System.Object, e As System.EventArgs) Handles btn_moveX100Y200.Click
-        SendCommand("G1 X100 Y200 F500;")
-    End Sub
-
-    Private Sub tb_ActPosX_GotFocus(sender As Object, e As System.EventArgs) Handles tb_ActPosX.GotFocus
-        btn_tmpbutton.Focus()
-    End Sub
-    Private Sub tb_ActPosY_GotFocus(sender As Object, e As System.EventArgs) Handles tb_ActPosY.GotFocus
-        btn_tmpbutton.Focus()
-    End Sub
-
-    Private Sub btn_sendProgramm_Click(sender As System.Object, e As System.EventArgs) Handles btn_sendProgram.Click
-        CurrentRow = 1
-        lines.Clear()
-
-        For Each line In tb_cleanedGCode.Lines
-            If line <> "" Then lines.Add(line)
-        Next
-
-        TimeStart = Now
-
-        SendNextLine()
-
-    End Sub
-
     Private Sub SendNextLine()
+
         Try
-            If CurrentRow < lines.Count - 1 Then
+            If LastLine Then
+                NCPrgEnd()
+            ElseIf CurrentRow < lines.Count - 1 Then
                 SendCommand(lines(CurrentRow))
                 CurrentRow = CurrentRow + 1
-            End If
-            If CurrentRow = lines.Count - 1 Then
+            ElseIf CurrentRow = lines.Count - 1 Then
                 ' last line
+                LastLine = True
                 SendCommand(lines(CurrentRow))
-                TimeEnd = Now
-                Dim RunTime As TimeSpan
-                RunTime = TimeEnd - TimeStart
-                SetTextDebug("Process time: " + RunTime.Hours.ToString + "h " + RunTime.Minutes.ToString + "m " + RunTime.Seconds.ToString + "s." + vbCrLf)
-                lines.Clear()
                 Exit Sub
             End If
         Catch ex As Exception
@@ -386,30 +231,15 @@ Public Class main
 
     End Sub
 
-
-    Private Sub tb_single_command_KeyDown(sender As Object, e As System.Windows.Forms.KeyEventArgs) Handles tb_single_command.KeyDown
-        If e.KeyCode = Keys.Enter Then SendCommand(tb_single_command.Text)
-    End Sub
-
-    Private Sub btn_MoreOrLess_Click(sender As System.Object, e As System.EventArgs) Handles btn_MoreOrLess.Click
-        If folded Then
-            Me.Size = New Size(989, 550)
-            folded = False
-            btn_MoreOrLess.Text = "<<< less"
-        Else
-            Me.Size = New Size(590, 550)
-            folded = True
-            btn_MoreOrLess.Text = "more >>>"
-        End If
-    End Sub
-
-    Private Sub btn_cleanGCode_Click(sender As System.Object, e As System.EventArgs)
-        cleanGcode()
-    End Sub
-
-
-    Private Sub btn_OpenManOp_Click(sender As System.Object, e As System.EventArgs)
-        ManOp.Show()
+    Private Sub NCPrgEnd()
+        TimeEnd = Now
+        Dim RunTime As TimeSpan
+        RunTime = TimeEnd - TimeStart
+        'SetTextDbg("Process time: " + RunTime.Hours.ToString + "h " + RunTime.Minutes.ToString + "m " + RunTime.Seconds.ToString + "s." + vbCrLf)
+        lines.Clear()
+        CurrentRow = 0
+        LastLine = False
+        MsgBox("Program end." + vbCrLf + "Process time: " + RunTime.Hours.ToString + "h " + RunTime.Minutes.ToString + "m " + RunTime.Seconds.ToString + "s.")
     End Sub
 
     Private Sub loadNCProgram()
@@ -570,16 +400,166 @@ Public Class main
             writeline = True
         Next
 
-        Dim strMsg As String = "The NC-File contains unsupported commands." + vbCrLf _
-                             + "It is unsave to operate with this program!" + vbCrLf _
-                             + "Shall i display the logfile?"
+        If UnsupportedCommand Then
+            Dim strMsg As String = "The NC-File contains unsupported commands." + vbCrLf _
+                                 + "It is unsave to operate with this program!" + vbCrLf _
+                                 + "Shall i display the logfile?"
 
-        Dim msgResult As MsgBoxResult
-        msgResult = MsgBox(strMsg, MsgBoxStyle.YesNo)
-        If msgResult = MsgBoxResult.Yes Then Log.Show()
-
+            Dim msgResult As MsgBoxResult
+            msgResult = MsgBox(strMsg, MsgBoxStyle.YesNo)
+            If msgResult = MsgBoxResult.Yes Then Log.Show()
+        End If
 
     End Sub
+
+
+    '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+    '''''''''''''''''''''''''Buttons'''''''''''''''''''''''''''''
+    '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+    ''' <summary>
+    ''' connect to selected comport.
+    ''' after established connection sleep some time and get machine config
+    ''' </summary>
+    ''' <remarks></remarks>
+    Private Sub btn_ConnectToSelectedPort_Click(sender As System.Object, e As System.EventArgs) Handles btn_ConnectToSelectedPort.Click
+        If cb_COMPort.Items.Count > 0 Then
+            Try
+                CNCComPort.PortName = cb_COMPort.Text
+                CNCComPort.BaudRate = 57600
+                CNCComPort.DataBits = 8
+                CNCComPort.RtsEnable = True
+                CNCComPort.DtrEnable = True
+                CNCComPort.Parity = System.IO.Ports.Parity.None
+                CNCComPort.StopBits = System.IO.Ports.StopBits.One
+                CNCComPort.ReadBufferSize = 64
+
+                CNCComPort.Open()
+
+                ' wait for Arduino to initialize ...
+                ' on my system for the Uno 3sec are adequate
+                System.Threading.Thread.Sleep(3000)
+                ' get config from GCodeAFMotorV2-Firmware
+                SendCommand("V1;")
+
+                btn_ConnectToSelectedPort.Enabled = False
+                btn_CloseComPort.Enabled = True
+                btn_getMachineConfig.Enabled = True
+                btn_DoHoming.Enabled = True
+
+                btn_sendSingleCommand.Enabled = True
+                ManualOperationsToolStripMenuItem.Enabled = True
+
+            Catch ex As Exception
+                MsgBox("Error while connecting to Serial-Port: " + vbCrLf + ex.Message)
+            End Try
+        Else
+            MsgBox("No COM-Port available.")
+        End If
+
+    End Sub
+
+    Private Sub btn_RefreshCOMPort_Click(sender As System.Object, e As System.EventArgs) Handles btn_RefreshCOMPort.Click
+        refreshCOMPort()
+    End Sub
+
+    Private Sub btn_CloseComPort_Click(sender As System.Object, e As System.EventArgs) Handles btn_CloseComPort.Click
+        COMPortClosing = True
+
+        If CNCComPort.IsOpen Then
+
+            Try
+                CNCComPort.Close()
+                btn_ConnectToSelectedPort.Enabled = True
+                btn_CloseComPort.Enabled = False
+                btn_CloseComPort.Enabled = False
+                btn_getMachineConfig.Enabled = False
+                btn_DoHoming.Enabled = False
+                btn_sendProgram.Enabled = False
+                btn_sendSingleCommand.Enabled = False
+                ManualOperationsToolStripMenuItem.Enabled = False
+                tb_ActPosX.Text = "UNDEF"
+                tb_ActPosY.Text = "UNDEF"
+            Catch ex As Exception
+                MsgBox(ex.Message)
+            End Try
+        End If
+        COMPortClosing = False
+    End Sub
+
+    Private Sub btn_getMachineConfig_Click(sender As System.Object, e As System.EventArgs) Handles btn_getMachineConfig.Click
+        SendCommand("V1;")
+    End Sub
+
+    Private Sub btn_sendSingleCommand_Click(sender As System.Object, e As System.EventArgs) Handles btn_sendSingleCommand.Click
+        SendCommand(tb_single_command.Text)
+    End Sub
+
+    Private Sub btn_sendProgramm_Click(sender As System.Object, e As System.EventArgs) Handles btn_sendProgram.Click
+        CurrentRow = 0
+        lines.Clear()
+
+        For Each line In tb_cleanedGCode.Lines
+            If line <> "" Then lines.Add(line)
+        Next
+
+        TimeStart = Now
+
+        SendNextLine()
+
+    End Sub
+
+    Private Sub btn_DoHoming_Click(sender As System.Object, e As System.EventArgs) Handles btn_DoHoming.Click
+        SendCommand("G28")
+        tb_ActPosX.Text = "0.00"
+        tb_ActPosY.Text = "0.00"
+    End Sub
+
+    Private Sub btn_G999_Click(sender As System.Object, e As System.EventArgs) Handles btn_G999.Click
+        SendCommand("G999;")
+        tb_ActPosX.Text = "0.00"
+        tb_ActPosY.Text = "0.00"
+    End Sub
+
+    Private Sub btn_moveX10_Click(sender As System.Object, e As System.EventArgs) Handles btn_moveX10.Click
+        SendCommand("G1 X10 Y0 F500;")
+    End Sub
+
+    Private Sub btn_moveX100Y200_Click(sender As System.Object, e As System.EventArgs) Handles btn_moveX100Y200.Click
+        SendCommand("G1 X100 Y200 F500;")
+    End Sub
+
+    Private Sub btn_goX0Y0_Click(sender As System.Object, e As System.EventArgs) Handles btn_goX0Y0.Click
+        SendCommand("G1 X0 Y0 F800;")
+    End Sub
+
+    Private Sub btn_MoreOrLess_Click(sender As System.Object, e As System.EventArgs) Handles btn_MoreOrLess.Click
+        If folded Then
+            Me.Size = New Size(989, 550)
+            folded = False
+            btn_MoreOrLess.Text = "<<< less"
+        Else
+            Me.Size = New Size(590, 550)
+            folded = True
+            btn_MoreOrLess.Text = "more >>>"
+        End If
+    End Sub
+
+    Private Sub btn_cleanGCode_Click(sender As System.Object, e As System.EventArgs)
+        cleanGcode()
+    End Sub
+
+    Private Sub btn_OpenManOp_Click(sender As System.Object, e As System.EventArgs)
+        ManOp.Show()
+    End Sub
+
+    Private Sub Button1_Click_1(sender As System.Object, e As System.EventArgs) Handles Button1.Click
+        cleanGcode()
+    End Sub
+
+    '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+    ''''''''''''''''''''ToolStripMenuEntries''''''''''''''''
+    '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
     Private Sub LoadNCProgramToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles LoadNCProgramToolStripMenuItem.Click
         loadNCProgram()
@@ -599,14 +579,6 @@ Public Class main
         ManOp.Show()
     End Sub
 
-    Private Sub Button1_Click_1(sender As System.Object, e As System.EventArgs) Handles Button1.Click
-        cleanGcode()
-    End Sub
-
-    Private Sub btn_goX0Y0_Click(sender As System.Object, e As System.EventArgs) Handles btn_goX0Y0.Click
-        SendCommand("G1 X0 Y0 F800;")
-    End Sub
-
     Private Sub SavecleanedNCProgramToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles SavecleanedNCProgramToolStripMenuItem.Click
 
         SFD_NCFile.DefaultExt = "nc"
@@ -623,6 +595,45 @@ Public Class main
         End If
 
     End Sub
+
+    '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+    '''''''''''''''''''''''Events''''''''''''''''''''''''''''''''
+    '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+    Private Sub main_FormClosing(sender As Object, e As System.Windows.Forms.FormClosingEventArgs) Handles Me.FormClosing
+        If CNCComPort.IsOpen Then CNCComPort.Close()
+    End Sub
+
+    Private Sub main_Load(sender As System.Object, e As System.EventArgs) Handles MyBase.Load
+        refreshCOMPort()
+        tb_ActPosX.Text = "UNDEF"
+        tb_ActPosY.Text = "UNDEF"
+        tb_GCodeProgramm.Text = ""
+
+        btn_CloseComPort.Enabled = False
+        btn_getMachineConfig.Enabled = False
+        btn_DoHoming.Enabled = False
+        btn_sendProgram.Enabled = False
+        btn_sendSingleCommand.Enabled = False
+        ManualOperationsToolStripMenuItem.Enabled = False
+
+        System.Threading.Thread.CurrentThread.CurrentCulture = Globalization.CultureInfo.CreateSpecificCulture("en-US")
+
+        btn_tmpbutton.Focus()
+
+    End Sub
+
+    Private Sub tb_single_command_KeyDown(sender As Object, e As System.Windows.Forms.KeyEventArgs) Handles tb_single_command.KeyDown
+        If e.KeyCode = Keys.Enter Then SendCommand(tb_single_command.Text)
+    End Sub
+
+    Private Sub tb_ActPosX_GotFocus(sender As Object, e As System.EventArgs) Handles tb_ActPosX.GotFocus
+        btn_tmpbutton.Focus()
+    End Sub
+    Private Sub tb_ActPosY_GotFocus(sender As Object, e As System.EventArgs) Handles tb_ActPosY.GotFocus
+        btn_tmpbutton.Focus()
+    End Sub
+
 
     'Private Sub Button2_Click(sender As System.Object, e As System.EventArgs) Handles Button2.Click
     '    Dim startend As New List(Of String)

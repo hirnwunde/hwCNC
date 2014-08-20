@@ -1,4 +1,18 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+﻿'* hwCNC - a program to control an GCodeAFMotorV2-Firmware based X/Y-Plotter
+'* 
+'* Copyright (C) 2014 Oliver Beck
+'* 
+'* This file is part of hwCNC.
+'* 
+'* hwCNC is free software: you can redistribute it and/or modify it under the terms of the
+'* GNU General Public License version 3 as published by the Free Software Foundation.
+'* 
+'* hwCNC is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+'* without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+'* 
+'* See the GNU General Public License for more details. You should have received a copy of the GNU
+'* General Public License along with hwCNC. If not, see <http://www.gnu.org/licenses/>.
+ <Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class main
     Inherits System.Windows.Forms.Form
 
@@ -22,7 +36,6 @@ Partial Class main
     'Das Bearbeiten mit dem Code-Editor ist nicht möglich.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
-        Me.components = New System.ComponentModel.Container()
         Me.btn_ConnectToSelectedPort = New System.Windows.Forms.Button()
         Me.cb_COMPort = New System.Windows.Forms.ComboBox()
         Me.btn_RefreshCOMPort = New System.Windows.Forms.Button()
@@ -66,8 +79,6 @@ Partial Class main
         Me.btn_goX0Y0 = New System.Windows.Forms.Button()
         Me.SFD_NCFile = New System.Windows.Forms.SaveFileDialog()
         Me.Button2 = New System.Windows.Forms.Button()
-        Me.TimerRuntime = New System.Windows.Forms.Timer(Me.components)
-        Me.TextBox1 = New System.Windows.Forms.TextBox()
         Me.GroupBox1.SuspendLayout()
         Me.MenuStrip1.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
@@ -175,12 +186,14 @@ Partial Class main
         '
         'btn_getMachineConfig
         '
+        Me.btn_getMachineConfig.Enabled = False
         Me.btn_getMachineConfig.Location = New System.Drawing.Point(87, 27)
         Me.btn_getMachineConfig.Name = "btn_getMachineConfig"
         Me.btn_getMachineConfig.Size = New System.Drawing.Size(75, 49)
         Me.btn_getMachineConfig.TabIndex = 17
         Me.btn_getMachineConfig.Text = "get Config from machine"
         Me.btn_getMachineConfig.UseVisualStyleBackColor = True
+        Me.btn_getMachineConfig.Visible = False
         '
         'tb_single_command
         '
@@ -285,7 +298,7 @@ Partial Class main
         Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.FileToolStripMenuItem, Me.HelpToolStripMenuItem, Me.ManualOperationsToolStripMenuItem})
         Me.MenuStrip1.Location = New System.Drawing.Point(0, 0)
         Me.MenuStrip1.Name = "MenuStrip1"
-        Me.MenuStrip1.Size = New System.Drawing.Size(1248, 24)
+        Me.MenuStrip1.Size = New System.Drawing.Size(584, 24)
         Me.MenuStrip1.TabIndex = 39
         Me.MenuStrip1.Text = "MenuStrip1"
         '
@@ -440,12 +453,14 @@ Partial Class main
         '
         'Button1
         '
+        Me.Button1.Enabled = False
         Me.Button1.Location = New System.Drawing.Point(261, 13)
         Me.Button1.Name = "Button1"
         Me.Button1.Size = New System.Drawing.Size(75, 23)
         Me.Button1.TabIndex = 45
         Me.Button1.Text = "Button1"
         Me.Button1.UseVisualStyleBackColor = True
+        Me.Button1.Visible = False
         '
         'btn_goX0Y0
         '
@@ -460,32 +475,20 @@ Partial Class main
         '
         'Button2
         '
+        Me.Button2.Enabled = False
         Me.Button2.Location = New System.Drawing.Point(188, 12)
         Me.Button2.Name = "Button2"
         Me.Button2.Size = New System.Drawing.Size(37, 23)
         Me.Button2.TabIndex = 47
         Me.Button2.Text = "Button2"
         Me.Button2.UseVisualStyleBackColor = True
-        '
-        'TimerRuntime
-        '
-        Me.TimerRuntime.Interval = 500
-        '
-        'TextBox1
-        '
-        Me.TextBox1.Location = New System.Drawing.Point(977, 34)
-        Me.TextBox1.Multiline = True
-        Me.TextBox1.Name = "TextBox1"
-        Me.TextBox1.ScrollBars = System.Windows.Forms.ScrollBars.Both
-        Me.TextBox1.Size = New System.Drawing.Size(259, 469)
-        Me.TextBox1.TabIndex = 48
+        Me.Button2.Visible = False
         '
         'main
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(1248, 522)
-        Me.Controls.Add(Me.TextBox1)
+        Me.ClientSize = New System.Drawing.Size(584, 522)
         Me.Controls.Add(Me.Button2)
         Me.Controls.Add(Me.btn_goX0Y0)
         Me.Controls.Add(Me.Button1)
@@ -568,7 +571,5 @@ Partial Class main
     Friend WithEvents chkb_debug As System.Windows.Forms.CheckBox
     Friend WithEvents SFD_NCFile As System.Windows.Forms.SaveFileDialog
     Friend WithEvents Button2 As System.Windows.Forms.Button
-    Friend WithEvents TimerRuntime As System.Windows.Forms.Timer
-    Friend WithEvents TextBox1 As System.Windows.Forms.TextBox
 
 End Class
